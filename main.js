@@ -534,12 +534,12 @@ function render(timestamp) {
 	// Now let's draw a shape animated!
 	// You may be wondering where the texture coordinates are!
 	// We've modified the object.js to add in support for this attribute array!
-    useTextures = 0
+    useTextures = 0;
     gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
 
 
     var cubeTranslate = [0, -2, 0];
-    var cubeScale = [4,0.2,4];
+    var cubeScale = [5,0.2,5];
 
     CreateObjectNoStack("cube",cubeTranslate, 0, xAxis, cubeScale, colorWhite);
 
