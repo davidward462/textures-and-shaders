@@ -53,6 +53,13 @@ var currentRotation = [0,0,0];
 
 var useTextures = 1;
 
+// Colors
+var colorWhite = vec4(1.0, 1.0, 1.0, 1.0);
+var colorBlack = vec4(0.0, 0.0, 0.0, 1.0);
+var colorSkyBlue = vec4( 0.5, 0.5, 1.0, 1.0);
+var colorGrassGreen = vec4(0.24,0.57,0.25, 1.0);
+var colorMidnightBlue = vec4(0.0,0.20,0.40, 1.0);
+
 //making a texture image procedurally
 //Let's start with a 1-D array
 var texSize = 8;
@@ -281,7 +288,7 @@ window.onload = function init() {
     if ( !gl ) { alert( "WebGL isn't available" ); }
 
     gl.viewport( 0, 0, canvas.width, canvas.height );
-    gl.clearColor( 0.5, 0.5, 1.0, 1.0 );
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
     
     gl.enable(gl.DEPTH_TEST);
 
