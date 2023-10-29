@@ -54,7 +54,12 @@ var useTextures = 1; // indicate whether or not to draw textures at a particular
 var currentRotation = [0,0,0];
 
 // Object variables
-
+zeroVector = [0, 0, 0];
+noTranslate = zeroVector;
+noScale = zeroVector;8
+xAxis = [1, 0, 0];
+yAxis = [0, 1 ,0];
+zAxix = [0, 0, 1];
 
 
 // Colors
@@ -431,16 +436,8 @@ function gPush() {
 }
 
 // Functions to create and draw objects
-
-// Apply translate, rotate, scale, and color to draw a shape.
-function CreateObjectNoStack(shape, translate, rotate, rotateAxis, scale, color)
+function DrawShape(shape)
 {
-    gTranslate(translate[0], translate[1], translate[2]);
-    gRotate(rotate, rotateAxis[0], rotateAxis[1], rotateAxis[2]);
-    
-    setColor(color);
-    gScale(scale[0], scale[1], scale[2]);
-
     // Determine shape
     if(shape=="cone")
     {
@@ -457,6 +454,18 @@ function CreateObjectNoStack(shape, translate, rotate, rotateAxis, scale, color)
 }
 
 // Apply translate, rotate, scale, and color to draw a shape.
+function CreateObjectNoStack(shape, translate, rotate, rotateAxis, scale, color)
+{
+    gTranslate(translate[0], translate[1], translate[2]);
+    gRotate(rotate, rotateAxis[0], rotateAxis[1], rotateAxis[2]);
+    
+    setColor(color);
+    gScale(scale[0], scale[1], scale[2]);
+
+    DrawShape(shape);
+}
+
+// Apply translate, rotate, scale, and color to draw a shape.
 function CreateObjectStack(shape, translate, rotate, rotateAxis, scale, color)
 {
     gTranslate(translate[0], translate[1], translate[2]);
@@ -465,19 +474,7 @@ function CreateObjectStack(shape, translate, rotate, rotateAxis, scale, color)
     gPush();
         setColor(color);
         gScale(scale[0], scale[1], scale[2]);
-        // Determine shape
-        if(shape=="cone")
-        {
-            drawCone();
-        }
-        else if(shape=="sphere")
-        {
-            drawSphere();
-        }
-        else // base case
-        {
-            drawCube();
-        }
+        DrawShape(shape);
     gPop();
 }
 
@@ -488,7 +485,7 @@ function render(timestamp) {
 
     center = [0, 0, 0];
     angle = 0;
-    radius = 4;
+    radius = 10;
     rotateFactor = 0.05;
     eyeX = center[0] + radius * Math.sin(radians(timestamp*rotateFactor));
     eyeZ = center[2] + radius * Math.cos(radians(timestamp*rotateFactor));
@@ -530,6 +527,8 @@ function render(timestamp) {
 		prevTime = timestamp;
 	}
 	
+    // time
+    timeSeconds = timestamp / 1000.0;
 	
 	
 	// Now let's draw a shape animated!
@@ -539,10 +538,12 @@ function render(timestamp) {
     gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
 
 
-    var cubeTranslate = [0, 0, 0];
-    var cubeScale = [1,1,1];
+    var cubeTranslate = [0, -2, 0];
+    var cubeScale = [4,0.2,4];
 
-    CreateObjectNoStack("cube",cubeTranslate, 10, [1, 0, 0], cubeScale, colorWhite);
+    CreateObjectNoStack("cube",cubeTranslate, 0, xAxis, cubeScale, colorWhite);
+
+    console.log(timeSeconds);
 	
     
     if( animFlag )
