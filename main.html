@@ -57,29 +57,38 @@ main()
 
 <script id="fragment-shader" type="x-shader/x-fragment">#version 300 es
 
-precision mediump float;
+    precision mediump float;
 
-uniform sampler2D texture1;
-uniform sampler2D texture2;
-uniform int useTextures;
-
-in vec4 fColor;
-in vec2 fTexCoord;
-
-layout(location=0) out vec4 fragColor ;
-
-void
-main()
-{
-	if( useTextures == 1)
+    uniform sampler2D texture1;
+    uniform sampler2D texture2;
+    uniform int useTextures;
+    uniform int textureIndex;
+    
+    in vec4 fColor;
+    in vec2 fTexCoord;
+    
+    layout(location=0) out vec4 fragColor ;
+    
+    void
+    main()
     {
-		fragColor = texture( texture1, fTexCoord );
-	}
-	else
-	{
-		fragColor = texture( texture2, fTexCoord );
-	}
-}
+        if( useTextures == 1)
+        {
+            if (textureIndex == 0)
+            {
+                fragColor = texture( texture1, fTexCoord );
+            }
+            
+            if (textureIndex == 1)
+            {
+                fragColor = texture( texture2, fTexCoord );
+            }
+        }
+        else
+        {
+            fragColor = fColor;
+        }
+    }
 </script>
 
 <script type="text/javascript" src="Common/webgl-utils.js"></script>
