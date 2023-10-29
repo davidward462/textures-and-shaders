@@ -430,8 +430,17 @@ function gPush() {
 function render(timestamp) {
     
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    
-    eye = vec3(0,-10,10);
+
+    center = [0, 0, 0];
+    angle = 0;
+    radius = 1;
+    rotateFactor = 0.1;
+    eyeX = center[0] + radius * Math.sin(radians(timestamp*rotateFactor));
+    eyeZ = center[2] + radius * Math.cos(radians(timestamp*rotateFactor));
+
+    eye = vec3(eyeX, 5, eyeZ);
+    //eye = vec3(0, 5, 10);
+
     MS = []; // Initialize modeling matrix stack
 	
 	// initialize the modeling matrix to identity
@@ -442,6 +451,11 @@ function render(timestamp) {
    
     // set the projection matrix
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
+
+    // perspective projection
+    fovy = 70;
+    aspect = 1;
+    //projectionMatrix = perspective(fovy, aspect, near, far)
 
     
     // set all the matrices
@@ -469,7 +483,7 @@ function render(timestamp) {
     useTextures = 0
     gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
 
-    var planetTranslate = [0, -4, -1];
+    var planetTranslate = [0, -4, 0];
     var planetScale = [3, 3, 3];
 
     gTranslate(planetTranslate[0], planetTranslate[1], planetTranslate[2]);
@@ -477,7 +491,7 @@ function render(timestamp) {
 	{
         gScale(planetScale[0], planetScale[1], planetScale[2]);
         setColor(colorGrassGreen);
-		drawSphere();
+		//drawSphere();
 	}
 	gPop();
 
