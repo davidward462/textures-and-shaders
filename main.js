@@ -46,12 +46,16 @@ var resetTimerFlag = true;
 var animFlag = false;
 var controller;
 
+var useTextures = 1; // indicate whether or not to draw textures at a particular moment
+
 // These are used to store the current state of objects.
 // In animation it is often useful to think of an object as having some DOF
 // Then the animation is simply evolving those DOF over time.
 var currentRotation = [0,0,0];
 
-var useTextures = 1;
+// Object variables
+
+
 
 // Colors
 var colorWhite = vec4(1.0, 1.0, 1.0, 1.0);
@@ -426,6 +430,57 @@ function gPush() {
     MS.push(modelMatrix);
 }
 
+// Functions to create and draw objects
+
+// Apply translate, rotate, scale, and color to draw a shape.
+function CreateObjectNoStack(shape, translate, rotate, rotateAxis, scale, color)
+{
+    gTranslate(translate[0], translate[1], translate[2]);
+    gRotate(rotate, rotateAxis[0], rotateAxis[1], rotateAxis[2]);
+    
+    setColor(color);
+    gScale(scale[0], scale[1], scale[2]);
+
+    // Determine shape
+    if(shape=="cone")
+    {
+        drawCone();
+    }
+    else if(shape=="sphere")
+    {
+        drawSphere();
+    }
+    else // base case
+    {
+        drawCube();
+    }
+}
+
+// Apply translate, rotate, scale, and color to draw a shape.
+function CreateObjectStack(shape, translate, rotate, rotateAxis, scale, color)
+{
+    gTranslate(translate[0], translate[1], translate[2]);
+    gRotate(rotate, rotateAxis[0], rotateAxis[1], rotateAxis[2]);
+    
+    gPush();
+        setColor(color);
+        gScale(scale[0], scale[1], scale[2]);
+        // Determine shape
+        if(shape=="cone")
+        {
+            drawCone();
+        }
+        else if(shape=="sphere")
+        {
+            drawSphere();
+        }
+        else // base case
+        {
+            drawCube();
+        }
+    gPop();
+}
+
 
 function render(timestamp) {
     
@@ -483,24 +538,11 @@ function render(timestamp) {
     useTextures = 0
     gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
 
-    var planetTranslate = [0, -4, 0];
-    var planetScale = [3, 3, 3];
 
-    gTranslate(planetTranslate[0], planetTranslate[1], planetTranslate[2]);
-	gPush();
-	{
-        gScale(planetScale[0], planetScale[1], planetScale[2]);
-        setColor(colorGrassGreen);
-		//drawSphere();
-	}
-	gPop();
+    var cubeTranslate = [0, 0, 0];
+    var cubeScale = [1,1,1];
 
-    gPush();
-        gTranslate(0, 1, 0);
-        gScale(1,1,1);
-        setColor(colorWhite);
-        drawCube();
-    gPop();
+    CreateObjectNoStack("cube",cubeTranslate, 10, [1, 0, 0], cubeScale, colorWhite);
 	
     
     if( animFlag )
