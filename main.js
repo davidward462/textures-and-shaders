@@ -273,12 +273,6 @@ function initTexturesForExample() {
     loadImageTexture(textureArray[textureArray.length-1],imageCheckerboard) ;
 }
 
-// Changes which texture is active in the array of texture examples (see initTexturesForExample)
-function toggleTextures() {
-    useTextures = (useTextures + 1) % 2
-	gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
-}
-
 window.onload = function init() {
 
     canvas = document.getElementById( "gl-canvas" );
@@ -334,11 +328,6 @@ window.onload = function init() {
             resetTimerFlag = true ;
             window.requestAnimFrame(render);
         }
-    };
-    
-    document.getElementById("textureToggleButton").onclick = function() {
-        //toggleTextures() ;
-        //window.requestAnimFrame(render);
     };
 
     var controller = new CameraController(canvas);
