@@ -469,14 +469,24 @@ function render(timestamp) {
     useTextures = 0
     gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
 
+    var planetTranslate = [0, -4, -1];
+    var planetScale = [3, 3, 3];
+
+    gTranslate(planetTranslate[0], planetTranslate[1], planetTranslate[2]);
 	gPush();
 	{
-		currentRotation[2] = currentRotation[2] + 30*dt;
-		gRotate(currentRotation[2],0,0,1);
-        setColor(vec4(1.0, 1.0, 1.0, 1.0));
-		drawCube();
+        gScale(planetScale[0], planetScale[1], planetScale[2]);
+        setColor(colorGrassGreen);
+		drawSphere();
 	}
-	gPop() ;
+	gPop();
+
+    gPush();
+        gTranslate(0, 1, 0);
+        gScale(2,2,2);
+        setColor(colorWhite);
+        drawCube();
+    gPop();
 	
     
     if( animFlag )
