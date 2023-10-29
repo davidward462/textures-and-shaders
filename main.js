@@ -337,8 +337,8 @@ window.onload = function init() {
     };
     
     document.getElementById("textureToggleButton").onclick = function() {
-        toggleTextures() ;
-        window.requestAnimFrame(render);
+        //toggleTextures() ;
+        //window.requestAnimFrame(render);
     };
 
     var controller = new CameraController(canvas);
@@ -465,34 +465,19 @@ function render(timestamp) {
 		prevTime = timestamp;
 	}
 	
-	// We need to bind our textures, ensure the right one is active before we draw
-	//Activate a specified "texture unit".
-    //Texture units are of form gl.TEXTUREi | where i is an integer.
-	gl.activeTexture(gl.TEXTURE0);
-	if (useTextures % 2 == 1) 
-	{
-		//Binds a texture to a target. Target is then used in future calls.
-		//Targets:
-			// TEXTURE_2D           - A two-dimensional texture.
-			// TEXTURE_CUBE_MAP     - A cube-mapped texture.
-			// TEXTURE_3D           - A three-dimensional texture.
-			// TEXTURE_2D_ARRAY     - A two-dimensional array texture.
-		gl.bindTexture(gl.TEXTURE_2D, textureArray[0].textureWebGL);
-		gl.uniform1i(gl.getUniformLocation(program, "texture1"), 0);
-	}
-    else
-	{
-		gl.bindTexture(gl.TEXTURE_2D, textureArray[1].textureWebGL);
-		gl.uniform1i(gl.getUniformLocation(program, "texture2"), 0);
-	}
+	
 	
 	// Now let's draw a shape animated!
 	// You may be wondering where the texture coordinates are!
 	// We've modified the object.js to add in support for this attribute array!
+    useTextures = 0
+    gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
+
 	gPush();
 	{
 		currentRotation[2] = currentRotation[2] + 30*dt;
 		gRotate(currentRotation[2],0,0,1);
+        setColor(vec4(1.0, 1.0, 1.0, 1.0));
 		drawCube();
 	}
 	gPop() ;
