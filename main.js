@@ -433,7 +433,7 @@ function render(timestamp) {
 
     center = [0, 0, 0];
     angle = 0;
-    radius = 1;
+    radius = 4;
     rotateFactor = 0.1;
     eyeX = center[0] + radius * Math.sin(radians(timestamp*rotateFactor));
     eyeZ = center[2] + radius * Math.cos(radians(timestamp*rotateFactor));
@@ -497,7 +497,7 @@ function render(timestamp) {
 
     gPush();
         gTranslate(0, 1, 0);
-        gScale(2,2,2);
+        gScale(1,1,1);
         setColor(colorWhite);
         drawCube();
     gPop();
