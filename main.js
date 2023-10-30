@@ -281,9 +281,13 @@ function loadImageTexture(tex, image) {
 }
 
 // This just calls the appropriate texture loads for this example adn puts the textures in an array
+// Store textures
 function initTexturesForExample() {
     textureArray.push({}) ;
     loadFileTexture(textureArray[textureArray.length-1],"brick.png") ;
+
+    textureArray.push({}) ;
+    loadFileTexture(textureArray[textureArray.length-1],"grass.jpg") ;
     
     textureArray.push({}) ;
     loadImageTexture(textureArray[textureArray.length-1],imageCheckerboard) ;
@@ -559,17 +563,32 @@ function render(timestamp) {
     var floatingCubeTranslate = [0, 3, 0];
     var floatingCubeScale = [1, 1, 1]
 
+    // init textures
+    useTextures = 1;
+    gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
+
+    // use texture index 1
+    gl.uniform1i(gl.getUniformLocation(program, "textureIndex"), 1);
+
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, textureArray[1].textureWebGL);
+	gl.uniform1i(gl.getUniformLocation(program, "texture2"), 1);
+
     // ground
     CreateObjectStack("sphere", cubeTranslate, 0, xAxis, [cubeScale[0], 0., cubeScale[2]], colorGrassGreen);
+
+    useTextures = 0;
+    gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
     CreateObjectFullStack("cylinder", [0, -0.5, 0], 90, xAxis, [10.1, 10.1, 1], colorWhite);
 
     // cube texture
+    
     useTextures = 1;
     gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
 
     // use texture index 0
     gl.uniform1i(gl.getUniformLocation(program, "textureIndex"), 0);
-    
+
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, textureArray[0].textureWebGL);
 	gl.uniform1i(gl.getUniformLocation(program, "texture1"), 0);
