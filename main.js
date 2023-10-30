@@ -65,7 +65,7 @@ zAxix = [0, 0, 1];
 // Colors
 var colorWhite = vec4(1.0, 1.0, 1.0, 1.0);
 var colorBlack = vec4(0.0, 0.0, 0.0, 1.0);
-var colorSkyBlue = vec4( 0.5, 0.5, 1.0, 1.0);
+var colorSkyBlue = vec4(0.5, 0.5, 1.0, 1.0);
 var colorGrassGreen = vec4(0.24,0.57,0.25, 1.0);
 var colorMidnightBlue = vec4(0.0,0.20,0.40, 1.0);
 
@@ -297,7 +297,7 @@ window.onload = function init() {
     if ( !gl ) { alert( "WebGL isn't available" ); }
 
     gl.viewport( 0, 0, canvas.width, canvas.height );
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clearColor(0.5, 0.5, 1.0, 1.0);
     
     gl.enable(gl.DEPTH_TEST);
 
@@ -447,6 +447,10 @@ function DrawShape(shape)
     {
         drawSphere();
     }
+    else if(shape=="cylinder")
+    {
+        drawCylinder();
+    }
     else // base case
     {
         drawCube();
@@ -472,6 +476,19 @@ function CreateObjectStack(shape, translate, rotate, rotateAxis, scale, color)
     gRotate(rotate, rotateAxis[0], rotateAxis[1], rotateAxis[2]);
     
     gPush();
+        setColor(color);
+        gScale(scale[0], scale[1], scale[2]);
+        DrawShape(shape);
+    gPop();
+}
+
+// Apply translate, rotate, scale, and color to draw a shape.
+function CreateObjectFullStack(shape, translate, rotate, rotateAxis, scale, color)
+{
+    gPush();
+        gTranslate(translate[0], translate[1], translate[2]);
+        gRotate(rotate, rotateAxis[0], rotateAxis[1], rotateAxis[2]);
+
         setColor(color);
         gScale(scale[0], scale[1], scale[2]);
         DrawShape(shape);
@@ -538,10 +555,25 @@ function render(timestamp) {
     gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
 
 
-    var cubeTranslate = [0, -2, 0];
+    var cubeTranslate = [0, -4, 0];
     var cubeScale = [5,0.2,5];
 
-    CreateObjectNoStack("cube",cubeTranslate, 0, xAxis, cubeScale, colorWhite);
+    var floatingCubeTranslate = [0, 3, 0];
+    var floatingCubeScale = [1, 1, 1]
+
+    // ground
+    CreateObjectStack("sphere", cubeTranslate, 0, xAxis, [cubeScale[0], 0., cubeScale[2]], colorGrassGreen);
+    CreateObjectFullStack("cylinder", [0, -0.5, 0], 90, xAxis, [10.1, 10.1, 1], colorWhite);
+    //CreateObjectStack("cube",cubeTranslate, 0, xAxis, cubeScale, colorWhite);
+
+    if(timeSeconds > 5)
+    {
+        gPush();
+        CreateObjectStack("cube", floatingCubeTranslate, 0, xAxis, floatingCubeScale, colorWhite);
+        gPop();
+    }
+
+    
 
     console.log(timeSeconds);
 	
