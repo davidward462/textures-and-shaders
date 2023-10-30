@@ -284,10 +284,10 @@ function loadImageTexture(tex, image) {
 // Store textures
 function initTexturesForExample() {
     textureArray.push({}) ;
-    loadFileTexture(textureArray[textureArray.length-1],"brick.png") ;
+    loadFileTexture(textureArray[textureArray.length-1],"textures/brick.png") ;
 
     textureArray.push({}) ;
-    loadFileTexture(textureArray[textureArray.length-1],"grass.jpg") ;
+    loadFileTexture(textureArray[textureArray.length-1],"textures/grass.jpg") ;
     
     textureArray.push({}) ;
     loadImageTexture(textureArray[textureArray.length-1],imageCheckerboard) ;
