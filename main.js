@@ -590,35 +590,17 @@ function render(timestamp) {
     // init textures
     SetTextureUse(1);
 
-    // use texture index 1
-    // gl.uniform1i(gl.getUniformLocation(program, "textureIndex"), 1);
-
-    // gl.activeTexture(gl.TEXTURE1);
-    // gl.bindTexture(gl.TEXTURE_2D, textureArray[1].textureWebGL);
-	// gl.uniform1i(gl.getUniformLocation(program, "texture2"), 1);
-
+    // use texture index 1 for ground
     MakeTextureActive(1, 1, "texture1", gl.TEXTURE1);
-
-    // ground
     CreateObjectStack("sphere", cubeTranslate, 0, xAxis, [cubeScale[0], 0., cubeScale[2]], colorGrassGreen);
 
+    // do not texture object
     SetTextureUse(0);
-
     CreateObjectFullStack("cylinder", [0, -0.5, 0], 90, xAxis, [10.1, 10.1, 1], colorWhite);
 
-    // cube texture
-    
+    // cube texture, using texture index 0
     SetTextureUse(1);
-
-    // use texture index 0
-    // gl.uniform1i(gl.getUniformLocation(program, "textureIndex"), 0);
-
-    // gl.activeTexture(gl.TEXTURE0);
-    // gl.bindTexture(gl.TEXTURE_2D, textureArray[0].textureWebGL);
-	// gl.uniform1i(gl.getUniformLocation(program, "texture0"), 0);
-
     MakeTextureActive(0, 0, "texture0", gl.TEXTURE0);
-
     gPush();
         CreateObjectStack("cube", floatingCubeTranslate, 0, xAxis, floatingCubeScale, colorWhite);
     gPop();
