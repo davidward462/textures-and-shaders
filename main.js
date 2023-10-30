@@ -515,8 +515,10 @@ function SetTextureUse(value)
     gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
 }
 
-function MakeTextureActive(textureIndex, textureArrayIndex, textureVariable, activeTexture)
+function MakeTextureActive(textureIndex, textureVariable, activeTexture)
 {
+    textureArrayIndex = textureIndex; // keep this name different
+
     gl.uniform1i(gl.getUniformLocation(program, "textureIndex"), textureIndex);
 
     gl.activeTexture(activeTexture);
@@ -591,7 +593,7 @@ function render(timestamp) {
     SetTextureUse(1);
 
     // use texture index 1 for ground
-    MakeTextureActive(1, 1, "texture1", gl.TEXTURE1);
+    MakeTextureActive(1, "texture1", gl.TEXTURE1);
     CreateObjectStack("sphere", cubeTranslate, 0, xAxis, [cubeScale[0], 0., cubeScale[2]], colorGrassGreen);
 
     // do not texture object
@@ -600,7 +602,7 @@ function render(timestamp) {
 
     // cube texture, using texture index 0
     SetTextureUse(1);
-    MakeTextureActive(0, 0, "texture0", gl.TEXTURE0);
+    MakeTextureActive(0, "texture0", gl.TEXTURE0);
     gPush();
         CreateObjectStack("cube", floatingCubeTranslate, 0, xAxis, floatingCubeScale, colorWhite);
     gPop();
