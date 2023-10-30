@@ -283,7 +283,7 @@ function loadImageTexture(tex, image) {
 // This just calls the appropriate texture loads for this example adn puts the textures in an array
 function initTexturesForExample() {
     textureArray.push({}) ;
-    loadFileTexture(textureArray[textureArray.length-1],"sunset.bmp") ;
+    loadFileTexture(textureArray[textureArray.length-1],"brick.png") ;
     
     textureArray.push({}) ;
     loadImageTexture(textureArray[textureArray.length-1],imageCheckerboard) ;
@@ -551,8 +551,6 @@ function render(timestamp) {
 	// Now let's draw a shape animated!
 	// You may be wondering where the texture coordinates are!
 	// We've modified the object.js to add in support for this attribute array!
-    useTextures = 0;
-    gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
 
 
     var cubeTranslate = [0, -4, 0];
@@ -564,11 +562,25 @@ function render(timestamp) {
     // ground
     CreateObjectStack("sphere", cubeTranslate, 0, xAxis, [cubeScale[0], 0., cubeScale[2]], colorGrassGreen);
     CreateObjectFullStack("cylinder", [0, -0.5, 0], 90, xAxis, [10.1, 10.1, 1], colorWhite);
-    //CreateObjectStack("cube",cubeTranslate, 0, xAxis, cubeScale, colorWhite);
+
+    // cube texture
+    useTextures = 1;
+    gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
+
+    // use texture index 0
+    gl.uniform1i(gl.getUniformLocation(program, "textureIndex"), 0);
+    
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, textureArray[0].textureWebGL);
+	gl.uniform1i(gl.getUniformLocation(program, "texture1"), 0);
 
     gPush();
-    CreateObjectStack("cube", floatingCubeTranslate, 0, xAxis, floatingCubeScale, colorWhite);
+        CreateObjectStack("cube", floatingCubeTranslate, 0, xAxis, floatingCubeScale, colorWhite);
     gPop();
+
+    // do not use textures
+    useTextures = 0;
+    gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
 
     
 
