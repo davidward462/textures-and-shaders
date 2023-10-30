@@ -515,6 +515,15 @@ function SetTextureUse(value)
     gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
 }
 
+function MakeTextureActive(textureIndex, textureArrayIndex, textureVariable, activeTexture)
+{
+    gl.uniform1i(gl.getUniformLocation(program, "textureIndex"), textureIndex);
+
+    gl.activeTexture(activeTexture);
+    gl.bindTexture(gl.TEXTURE_2D, textureArray[textureArrayIndex].textureWebGL);
+	gl.uniform1i(gl.getUniformLocation(program, textureVariable), textureArrayIndex);
+}
+
 function render(timestamp) {
     
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -582,11 +591,13 @@ function render(timestamp) {
     SetTextureUse(1);
 
     // use texture index 1
-    gl.uniform1i(gl.getUniformLocation(program, "textureIndex"), 1);
+    // gl.uniform1i(gl.getUniformLocation(program, "textureIndex"), 1);
 
-    gl.activeTexture(gl.TEXTURE1);
-    gl.bindTexture(gl.TEXTURE_2D, textureArray[1].textureWebGL);
-	gl.uniform1i(gl.getUniformLocation(program, "texture2"), 1);
+    // gl.activeTexture(gl.TEXTURE1);
+    // gl.bindTexture(gl.TEXTURE_2D, textureArray[1].textureWebGL);
+	// gl.uniform1i(gl.getUniformLocation(program, "texture2"), 1);
+
+    MakeTextureActive(1, 1, "texture1", gl.TEXTURE1);
 
     // ground
     CreateObjectStack("sphere", cubeTranslate, 0, xAxis, [cubeScale[0], 0., cubeScale[2]], colorGrassGreen);
@@ -600,20 +611,20 @@ function render(timestamp) {
     SetTextureUse(1);
 
     // use texture index 0
-    gl.uniform1i(gl.getUniformLocation(program, "textureIndex"), 0);
+    // gl.uniform1i(gl.getUniformLocation(program, "textureIndex"), 0);
 
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, textureArray[0].textureWebGL);
-	gl.uniform1i(gl.getUniformLocation(program, "texture1"), 0);
+    // gl.activeTexture(gl.TEXTURE0);
+    // gl.bindTexture(gl.TEXTURE_2D, textureArray[0].textureWebGL);
+	// gl.uniform1i(gl.getUniformLocation(program, "texture0"), 0);
+
+    MakeTextureActive(0, 0, "texture0", gl.TEXTURE0);
 
     gPush();
         CreateObjectStack("cube", floatingCubeTranslate, 0, xAxis, floatingCubeScale, colorWhite);
     gPop();
 
     // do not use textures
-    useTextures = 0;
-    gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
-
+    SetTextureUse(0);
     
 
     console.log(timeSeconds);
