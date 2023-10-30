@@ -566,12 +566,9 @@ function render(timestamp) {
     CreateObjectFullStack("cylinder", [0, -0.5, 0], 90, xAxis, [10.1, 10.1, 1], colorWhite);
     //CreateObjectStack("cube",cubeTranslate, 0, xAxis, cubeScale, colorWhite);
 
-    if(timeSeconds > 5)
-    {
-        gPush();
-        CreateObjectStack("cube", floatingCubeTranslate, 0, xAxis, floatingCubeScale, colorWhite);
-        gPop();
-    }
+    gPush();
+    CreateObjectStack("cube", floatingCubeTranslate, 0, xAxis, floatingCubeScale, colorWhite);
+    gPop();
 
     
 
