@@ -599,6 +599,8 @@ function render(timestamp) {
     // do not texture object
     SetTextureUse(0);
     CreateObjectFullStack("cylinder", [0, -0.5, 0], 90, xAxis, [10.1, 10.1, 1], colorWhite);
+    CreateObjectFullStack("sphere", [3, 3, 0], 0, xAxis, [1,1,1], colorWhite);
+    CreateObjectFullStack("cube", [2, 7, 1], 25, xAxis, [1,1.3,1], colorWhite);
 
     // cube texture, using texture index 0
     SetTextureUse(1);
