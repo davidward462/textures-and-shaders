@@ -499,6 +499,21 @@ function CreateObjectFullStack(shape, translate, rotate, rotateAxis, scale, colo
     gPop();
 }
 
+function SetTextureUse(value)
+{
+    if (value < 0)
+    {
+        value  = 0;
+    }
+
+    if (value > 1)
+    {
+        value = 1;
+    }
+
+    useTextures = value;
+    gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
+}
 
 function render(timestamp) {
     
@@ -564,8 +579,7 @@ function render(timestamp) {
     var floatingCubeScale = [1, 1, 1]
 
     // init textures
-    useTextures = 1;
-    gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
+    SetTextureUse(1);
 
     // use texture index 1
     gl.uniform1i(gl.getUniformLocation(program, "textureIndex"), 1);
@@ -577,14 +591,13 @@ function render(timestamp) {
     // ground
     CreateObjectStack("sphere", cubeTranslate, 0, xAxis, [cubeScale[0], 0., cubeScale[2]], colorGrassGreen);
 
-    useTextures = 0;
-    gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
+    SetTextureUse(0);
+
     CreateObjectFullStack("cylinder", [0, -0.5, 0], 90, xAxis, [10.1, 10.1, 1], colorWhite);
 
     // cube texture
     
-    useTextures = 1;
-    gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
+    SetTextureUse(1);
 
     // use texture index 0
     gl.uniform1i(gl.getUniformLocation(program, "textureIndex"), 0);
