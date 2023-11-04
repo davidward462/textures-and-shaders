@@ -65,6 +65,10 @@ zAxix = [0, 0, 1];
 // Colors
 var colorWhite = vec4(1.0, 1.0, 1.0, 1.0);
 var colorBlack = vec4(0.0, 0.0, 0.0, 1.0);
+var colorRed = vec4(1.0, 0.0, 0.0, 1.0);
+var colorGreen = vec4(0.0, 1.0, 0.0, 1.0);
+var colorBlue = vec4(0.0, 0.0, 1.0, 1.0);
+
 var colorSkyBlue = vec4(0.5, 0.5, 1.0, 1.0);
 var colorGrassGreen = vec4(0.24,0.57,0.25, 1.0);
 var colorMidnightBlue = vec4(0.0,0.20,0.40, 1.0);
@@ -599,8 +603,9 @@ function render(timestamp) {
     // do not texture object
     SetTextureUse(0);
     CreateObjectFullStack("cylinder", [0, -0.5, 0], 90, xAxis, [10.1, 10.1, 1], colorWhite);
-    CreateObjectFullStack("sphere", [3, 3, 0], 0, xAxis, [1,1,1], colorWhite);
+    CreateObjectFullStack("sphere", [3, 3, 0], 0, xAxis, [1,1,1], colorBlue);
     CreateObjectFullStack("cube", [2, 7, 1], 25, xAxis, [1,1.3,1], colorWhite);
+    CreateObjectFullStack("cone", [-2, 4, -1], 25, xAxis, [1,1,1], colorRed);
 
     // cube texture, using texture index 0
     SetTextureUse(1);
