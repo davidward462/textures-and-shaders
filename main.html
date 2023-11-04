@@ -3,34 +3,34 @@
 
 <script id="vertex-shader" type="x-shader/x-vertex">#version 300 es
 
-// Vertex Shader
+    // Vertex Shader
 
-in vec4 vPosition;
-in vec3 vNormal;
-in vec2 vTexCoord;
-
-out vec3 fPosition;
-out vec3 fNormal;
-out vec2 fTexCoord;
-
-uniform mat4 modelViewMatrix;
-uniform mat4 normalMatrix;
-uniform mat4 projectionMatrix;
-
-void main() {
+    in vec4 vPosition;
+    in vec3 vNormal;
+    in vec2 vTexCoord;
     
-    // Transform vertex position to eye coordinates
-    fPosition = vec3(modelViewMatrix * vPosition);
+    uniform mat4 modelViewMatrix;
+    uniform mat4 normalMatrix;
+    uniform mat4 projectionMatrix;
     
-    // Transform vertex normal into eye coordinates
-    fNormal = normalize(vec3(normalMatrix * vec4(vNormal, 0.0)));
+    out vec3 fPosition;
+    out vec3 fNormal;
+    out vec2 fTexCoord;
     
-    // Pass through the texture coordinates
-    fTexCoord = vTexCoord;
-    
-    // Final vertex position
-    gl_Position = projectionMatrix * modelViewMatrix * vPosition;
-}
+    void main() {
+        
+        // Transform vertex position to eye coordinates
+        fPosition = vec3(modelViewMatrix * vPosition);
+        
+        // Transform vertex normal into eye coordinates
+        fNormal = normalize(vec3(normalMatrix * vec4(vNormal, 0.0)));
+        
+        // Pass through the texture coordinates
+        fTexCoord = vTexCoord;
+        
+        // Final vertex position
+        gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+    }
 
 </script>
 
@@ -44,16 +44,16 @@ in vec3 fPosition;
 in vec3 fNormal;
 in vec2 fTexCoord;
 
-layout(location=0) out vec4 fragColor ;
+uniform sampler2D texture0;
+uniform sampler2D texture1;
+uniform int useTextures;
+uniform int textureIndex;
 
 uniform vec4 ambientProduct, diffuseProduct, specularProduct;
 uniform vec4 lightPosition;
 uniform float shininess;
 
-uniform sampler2D texture0;
-uniform sampler2D texture1;
-uniform int useTextures;
-uniform int textureIndex;
+layout(location=0) out vec4 fragColor;
 
 void main() {
 
@@ -73,15 +73,15 @@ void main() {
     vec4 ambient = ambientProduct;
 
     // Compute the diffuse light component
-    float NdotL = max(dot(N, L), 0.0);
-    vec4 diffuse = diffuseProduct * NdotL;
+    float lightDotNormal = max(dot(L, N), 0.0);
+    vec4 diffuse = diffuseProduct * lightDotNormal;
 
     // Compute the specular light component
     float RdotV = max(dot(R, V), 0.0);
     vec4 specular = specularProduct * pow(RdotV, shininess);
 
     // If the surface is facing away from the light source, there's no specular component
-    if(NdotL <= 0.0) {
+    if( dot(L, N) < 0.0 ) {
         specular = vec4(0.0, 0.0, 0.0, 1.0);
     }
 
