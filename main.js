@@ -537,7 +537,7 @@ function render(timestamp) {
     eyeX = center[0] + radius * Math.sin(radians(timestamp*rotateFactor));
     eyeZ = center[2] + radius * Math.cos(radians(timestamp*rotateFactor));
 
-    eye = vec3(eyeX, 1, eyeZ);
+    eye = vec3(eyeX, 2, eyeZ);
     //eye = vec3(0, 5, 10);
 
     MS = []; // Initialize modeling matrix stack
