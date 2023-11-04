@@ -70,24 +70,21 @@ void main() {
     // Reflected light vector
     vec3 R = reflect(-L, N);
 
-    // Ambient term is constant across a surface
-    vec4 ambient = ambientProduct;
+    // Compute diffuse component
+    float lightDotNormal = max( dot(L, N), 0.0);
+    vec4 diffuse = vec4(0.0, 0.0, 0.0, 1.0);
+    diffuse = diffuseProduct * lightDotNormal;
 
-    // Compute the diffuse light component
-    float lightDotNormal = max(dot(L, N), 0.0);
-    vec4 diffuse = diffuseProduct * lightDotNormal;
-
-    // Compute the specular light component
-    float RdotV = max(dot(R, V), 0.0);
-    vec4 specular = specularProduct * pow(RdotV, shininess);
+    // Compute specular component
+    vec4 specular = specularProduct * pow( max(dot(R, V), 0.0), shininess);
 
     // If the surface is facing away from the light source, there's no specular component
     if( dot(L, N) < 0.0 ) {
         specular = vec4(0.0, 0.0, 0.0, 1.0);
     }
 
-    // Combine the components to determine the final color
-    fragColor = ambient + diffuse + specular;
+    // summation of components to fragment color
+    fragColor = ambientProduct + diffuse + specular;
 
     // TODO: make lighting happen on textures
     if( useTextures == 1)
