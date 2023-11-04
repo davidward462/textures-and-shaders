@@ -19,10 +19,13 @@ uniform mat4 normalMatrix;
 uniform mat4 projectionMatrix;
 
 void main() {
+    
     // Transform vertex position to eye coordinates
     fPosition = vec3(modelViewMatrix * vPosition);
+    
     // Transform vertex normal into eye coordinates
     fNormal = normalize(vec3(normalMatrix * vec4(vNormal, 0.0)));
+    
     // Pass through the texture coordinates
     fTexCoord = vTexCoord;
     
@@ -56,8 +59,10 @@ void main() {
 
     // Vector from fragment position to light
     vec3 L = normalize(lightPosition.xyz - fPosition);
+    
     // Vector from fragment position to eye (assuming the eye is at the origin)
     vec3 V = normalize(-fPosition);
+    
     // Reflected light vector
     vec3 R = reflect(-L, N);
 
@@ -72,7 +77,7 @@ void main() {
     float RdotV = max(dot(R, V), 0.0);
     vec4 specular = specularProduct * pow(RdotV, shininess);
 
-// If the surface is facing away from the light source, there's no specular component
+    // If the surface is facing away from the light source, there's no specular component
     if(NdotL <= 0.0) {
         specular = vec4(0.0, 0.0, 0.0, 1.0);
     }
