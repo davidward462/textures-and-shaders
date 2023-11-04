@@ -4,7 +4,6 @@
 <script id="vertex-shader" type="x-shader/x-vertex">#version 300 es
 
 // Vertex Shader
-// Only responsible for passing the necessary data to the fragment shader
 
 in vec4 vPosition;
 in vec3 vNormal;
@@ -38,7 +37,6 @@ void main() {
 <script id="fragment-shader" type="x-shader/x-fragment">#version 300 es
 
 // Fragment Shader
-// Now performs per-pixel lighting computations
 
 precision mediump float;
 
@@ -46,14 +44,19 @@ in vec3 fPosition;
 in vec3 fNormal;
 in vec2 fTexCoord;
 
-out vec4 fragColor;
+layout(location=0) out vec4 fragColor ;
 
 uniform vec4 ambientProduct, diffuseProduct, specularProduct;
 uniform vec4 lightPosition;
 uniform float shininess;
 
+uniform sampler2D texture0;
+uniform sampler2D texture1;
+uniform int useTextures;
+uniform int textureIndex;
+
 void main() {
-    
+
     // Normalize interpolated normal
     vec3 N = normalize(fNormal);
 
@@ -85,8 +88,19 @@ void main() {
     // Combine the components to determine the final color
     fragColor = ambient + diffuse + specular;
 
-    // Include the texture color if you have a texture
-    // fragColor *= texture(sampler, fTexCoord);
+    // TODO: make lighting happen on textures
+    if( useTextures == 1)
+    {
+        if (textureIndex == 0)
+        {
+            fragColor = texture( texture0, fTexCoord );
+        }
+        
+        if (textureIndex == 1)
+        {
+            fragColor = texture( texture1, fTexCoord );
+        }
+    }
 }
 
 </script>
