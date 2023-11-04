@@ -53,9 +53,9 @@ uniform vec4 lightPosition;
 uniform float shininess;
 
 void main() {
+    
     // Normalize interpolated normal
     vec3 N = normalize(fNormal);
-
 
     // Vector from fragment position to light
     vec3 L = normalize(lightPosition.xyz - fPosition);
