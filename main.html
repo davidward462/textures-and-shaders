@@ -13,14 +13,14 @@
     uniform mat4 normalMatrix;
     uniform mat4 projectionMatrix;
     
-    out vec3 fPosition;
+    out vec3 fPos;
     out vec3 fNormal;
     out vec2 fTexCoord;
     
     void main() {
         
         // Transform vertex position to eye coordinates
-        fPosition = vec3(modelViewMatrix * vPosition);
+        fPos = vec3(modelViewMatrix * vPosition);
         
         // Transform vertex normal into eye coordinates
         fNormal = normalize(vec3(normalMatrix * vec4(vNormal, 0.0)));
@@ -40,10 +40,11 @@
 
 precision mediump float;
 
-in vec3 fPosition;
+in vec3 fPos;
 in vec3 fNormal;
 in vec2 fTexCoord;
 
+// texture variables
 uniform sampler2D texture0;
 uniform sampler2D texture1;
 uniform int useTextures;
@@ -61,10 +62,10 @@ void main() {
     vec3 N = normalize(fNormal);
 
     // Vector from fragment position to light
-    vec3 L = normalize(lightPosition.xyz - fPosition);
+    vec3 L = normalize(lightPosition.xyz - fPos);
     
     // Vector from fragment position to eye (assuming the eye is at the origin)
-    vec3 V = normalize(-fPosition);
+    vec3 V = normalize(-fPos);
     
     // Reflected light vector
     vec3 R = reflect(-L, N);
