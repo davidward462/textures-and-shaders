@@ -3,92 +3,87 @@
 
 <script id="vertex-shader" type="x-shader/x-vertex">#version 300 es
 
+// Vertex Shader
+// Only responsible for passing the necessary data to the fragment shader
+
 in vec4 vPosition;
 in vec3 vNormal;
-in vec4 vColor; // Note this is not actually getting used the compiler will optimize it out which will throw vertexAttribPointer errors on javascript side
 in vec2 vTexCoord;
 
-out vec4 fColor;
+out vec3 fPosition;
+out vec3 fNormal;
 out vec2 fTexCoord;
 
-uniform vec4 ambientProduct, diffuseProduct, specularProduct;
 uniform mat4 modelViewMatrix;
 uniform mat4 normalMatrix;
 uniform mat4 projectionMatrix;
-uniform vec4 lightPosition;
-uniform float shininess;
 
-
-void
-main()
-{
+void main() {
+    // Transform vertex position to eye coordinates
+    fPosition = vec3(modelViewMatrix * vPosition);
     // Transform vertex normal into eye coordinates
-    vec3 pos = (modelViewMatrix * vPosition).xyz;
-    //vec3 N = normalize( (modelViewMatrix*vec4(vNormal,0.0)).xyz);
-    vec3 N = normalize( (normalMatrix*vec4(vNormal,0.0)).xyz);
+    fNormal = normalize(vec3(normalMatrix * vec4(vNormal, 0.0)));
+    // Pass through the texture coordinates
+    fTexCoord = vTexCoord;
     
-
-    vec3 L = vec3(normalize(lightPosition.xyz-pos)) ;
-    vec3 V = normalize(-pos.xyz) ;
-    vec3 R = reflect(-L, N) ;
-
-
-    // Compute terms in the illumination equation
-    float lightDotNormal = max( dot(L, N), 0.0 );
-    vec4 diffuse = vec4(0.0, 0.0, 0.0, 1.0);
-    diffuse = diffuseProduct * lightDotNormal;
-	
-	
-    float reflectedDotViewShiny = pow( max(dot(R, V), 0.0), shininess );
-	vec4 specular = vec4(0.0, 0.0, 0.0, 1.0);
-    specular = specularProduct * reflectedDotViewShiny;
-    
-    if( dot(L, N) < 0.0 ) {
-        specular = vec4(0.0, 0.0, 0.0, 1.0);
-    }
-    
+    // Final vertex position
     gl_Position = projectionMatrix * modelViewMatrix * vPosition;
-    
-	fTexCoord = vTexCoord;
-    fColor = ambientProduct + diffuse + specular;
-    fColor.a = 1.0;
 }
+
 </script>
 
 <script id="fragment-shader" type="x-shader/x-fragment">#version 300 es
 
-    precision mediump float;
+// Fragment Shader
+// Now performs per-pixel lighting computations
 
-    uniform sampler2D texture0;
-    uniform sampler2D texture1;
-    uniform int useTextures;
-    uniform int textureIndex;
-    
-    in vec4 fColor;
-    in vec2 fTexCoord;
-    
-    layout(location=0) out vec4 fragColor ;
-    
-    void
-    main()
-    {
-        if( useTextures == 1)
-        {
-            if (textureIndex == 0)
-            {
-                fragColor = texture( texture0, fTexCoord );
-            }
-            
-            if (textureIndex == 1)
-            {
-                fragColor = texture( texture1, fTexCoord );
-            }
-        }
-        else
-        {
-            fragColor = fColor;
-        }
+precision mediump float;
+
+in vec3 fPosition;
+in vec3 fNormal;
+in vec2 fTexCoord;
+
+out vec4 fragColor;
+
+uniform vec4 ambientProduct, diffuseProduct, specularProduct;
+uniform vec4 lightPosition;
+uniform float shininess;
+
+void main() {
+    // Normalize interpolated normal
+    vec3 N = normalize(fNormal);
+
+
+    // Vector from fragment position to light
+    vec3 L = normalize(lightPosition.xyz - fPosition);
+    // Vector from fragment position to eye (assuming the eye is at the origin)
+    vec3 V = normalize(-fPosition);
+    // Reflected light vector
+    vec3 R = reflect(-L, N);
+
+    // Ambient term is constant across a surface
+    vec4 ambient = ambientProduct;
+
+    // Compute the diffuse light component
+    float NdotL = max(dot(N, L), 0.0);
+    vec4 diffuse = diffuseProduct * NdotL;
+
+    // Compute the specular light component
+    float RdotV = max(dot(R, V), 0.0);
+    vec4 specular = specularProduct * pow(RdotV, shininess);
+
+// If the surface is facing away from the light source, there's no specular component
+    if(NdotL <= 0.0) {
+        specular = vec4(0.0, 0.0, 0.0, 1.0);
     }
+
+    // Combine the components to determine the final color
+    fragColor = ambient + diffuse + specular;
+
+    // Include the texture color if you have a texture
+    // fragColor *= texture(sampler, fTexCoord);
+}
+
 </script>
 
 <script type="text/javascript" src="Common/webgl-utils.js"></script>
