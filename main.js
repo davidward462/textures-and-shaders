@@ -293,9 +293,6 @@ function loadImageTexture(tex, image) {
 function initTexturesForExample() {
     textureArray.push({}) ;
     loadFileTexture(textureArray[textureArray.length-1],"textures/mushroom-top.png") ;
-
-    textureArray.push({}) ;
-    loadFileTexture(textureArray[textureArray.length-1],"textures/grass.jpg") ;
     
     textureArray.push({}) ;
     loadImageTexture(textureArray[textureArray.length-1],imageCheckerboard) ;
