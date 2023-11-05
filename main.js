@@ -359,6 +359,8 @@ window.onload = function init() {
     };
 
     document.getElementById("viewToggleButton").onclick = function () {
+        animFlag = false;
+        resetTimerFlag = true ;
         viewIndex++;
         viewIndex = viewIndex % viewCount;
     };
@@ -634,7 +636,6 @@ function render(timestamp) {
     var mushroom2Pos = [-ringRadius, 0, 0];
     var mushroom3Pos = [0, 0, ringRadius];
     var mushroom4Pos = [0, 0, -ringRadius];
-
     var mushroom5Pos = [4, 0, 3];
     var mushroom6Pos = [-4, 0, -3];
     var mushroom7Pos = [-3, 0, 4];
