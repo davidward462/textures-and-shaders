@@ -47,7 +47,7 @@ var animFlag = false;
 var controller;
 
 // toggle view angle with button
-var viewIndex = 4;
+var viewIndex = 2;
 var viewCount = 8;
 
 var useTextures = 1; // indicate whether or not to draw textures at a particular moment
