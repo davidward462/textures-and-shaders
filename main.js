@@ -47,7 +47,7 @@ var animFlag = false;
 var controller;
 
 // toggle view angle with button
-var viewIndex = 0;
+var viewIndex = 4;
 var viewCount = 8;
 
 var useTextures = 1; // indicate whether or not to draw textures at a particular moment
@@ -539,7 +539,7 @@ function MakeTextureActive(textureIndex, textureVariable, activeTexture)
 	gl.uniform1i(gl.getUniformLocation(program, textureVariable), textureArrayIndex);
 }
 
-function CreateMushroom(position)
+function CreateMushroom(position, color)
 {
     rotation = 90;
     mushroomStalkScale = [0.5, 0.5, 1];
@@ -551,7 +551,7 @@ function CreateMushroom(position)
 
     CreateObjectStack("cylinder", position, rotation, xAxis, mushroomStalkScale, colorWhite);
     
-    CreateObjectNoStack("sphere", mushroomCapPos, rotation, xAxis, mushroomCapScale, colorWhite);
+    CreateObjectNoStack("sphere", mushroomCapPos, rotation, xAxis, mushroomCapScale, color);
 }
 
 function CreateSmallMushroom(position)
@@ -628,8 +628,28 @@ function render(timestamp) {
     var groundPos = [0, -4, 0];
     var groundScale = [6,0.2,6];
 
-    var mushroomPos = [0, 0, 0];
-    var smallMushroomPos = [3, 0, 0];
+    var ringRadius = 4.5;
+
+    var mushroom1Pos = [ringRadius, 0, 0];
+    var mushroom2Pos = [-ringRadius, 0, 0];
+    var mushroom3Pos = [0, 0, ringRadius];
+    var mushroom4Pos = [0, 0, -ringRadius];
+
+    var mushroom5Pos = [4, 0, 3];
+    var mushroom6Pos = [-4, 0, -3];
+    var mushroom7Pos = [-3, 0, 4];
+    var mushroom8Pos = [3, 0, -4];
+
+    var mushroomPosList = [
+        mushroom1Pos,
+        mushroom2Pos,
+        mushroom3Pos,
+        mushroom4Pos,
+        mushroom5Pos,
+        mushroom6Pos,
+        mushroom7Pos,
+        mushroom8Pos
+    ];
 
     // do not use textures
     SetTextureUse(0);
@@ -638,12 +658,38 @@ function render(timestamp) {
     CreateObjectStack("cube", groundPos, 0, xAxis, [groundScale[0], groundScale[1], groundScale[2]], colorGrassGreen);
         
     gPush();
-        CreateMushroom(mushroomPos);
+        CreateMushroom(mushroomPosList[0], colorWhite);
     gPop();
-    
+
     gPush();
-        CreateSmallMushroom(smallMushroomPos);
+        CreateMushroom(mushroomPosList[1], colorWhite);
     gPop();
+
+    gPush();
+        CreateMushroom(mushroomPosList[2], colorWhite);
+    gPop();
+
+    gPush();
+        CreateMushroom(mushroomPosList[3], colorWhite);
+    gPop();
+
+    gPush();
+        CreateMushroom(mushroomPosList[4], colorWhite);
+    gPop();
+
+    gPush();
+        CreateMushroom(mushroomPosList[5], colorWhite);
+    gPop();
+
+    gPush();
+        CreateMushroom(mushroomPosList[6], colorWhite);
+    gPop();
+
+    gPush();
+        CreateMushroom(mushroomPosList[7], colorWhite);
+    gPop();
+
+    
 
     // do not use textures
     SetTextureUse(0);
