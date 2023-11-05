@@ -546,6 +546,9 @@ function CreateMushroom(position)
     mushroomCapPos = [0, 0, -0.5];
     mushroomCapScale = [1, 0.4, 1];
 
+    // compensate for mushroom height
+    gTranslate(0, 0.7, 0);
+
     CreateObjectStack("cylinder", position, rotation, xAxis, mushroomStalkScale, colorWhite);
     
     CreateObjectNoStack("sphere", mushroomCapPos, rotation, xAxis, mushroomCapScale, colorWhite);
@@ -558,6 +561,9 @@ function CreateSmallMushroom(position)
     mushroomRoundCapPos = [0, 0, -0.3];
     mushroomRoundCapScaleValue = 0.4;
     mushroomRoundCapScale = [mushroomRoundCapScaleValue, mushroomRoundCapScaleValue, mushroomRoundCapScaleValue];
+
+    // compensate for mushroom height
+    gTranslate(0, 0.4, 0);
 
     CreateObjectStack("cylinder", position, rotation, xAxis, mushroomSmallStalkScale, colorWhite);
     
@@ -622,7 +628,8 @@ function render(timestamp) {
     var groundPos = [0, -4, 0];
     var groundScale = [6,0.2,6];
 
-    var mushroom1Pos = [0, 0, 0];
+    var mushroomPos = [0, 0, 0];
+    var smallMushroomPos = [3, 0, 0];
 
     // do not use textures
     SetTextureUse(0);
@@ -631,13 +638,11 @@ function render(timestamp) {
     CreateObjectStack("cube", groundPos, 0, xAxis, [groundScale[0], groundScale[1], groundScale[2]], colorGrassGreen);
         
     gPush();
-        CreateMushroom(mushroom1Pos);
+        CreateMushroom(mushroomPos);
     gPop();
-
-    gTranslate(3, 0, 0);
     
     gPush();
-        CreateSmallMushroom(mushroom1Pos);
+        CreateSmallMushroom(smallMushroomPos);
     gPop();
 
     // do not use textures
