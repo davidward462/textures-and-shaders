@@ -530,6 +530,31 @@ function MakeTextureActive(textureIndex, textureVariable, activeTexture)
 	gl.uniform1i(gl.getUniformLocation(program, textureVariable), textureArrayIndex);
 }
 
+function CreateMushroom(position)
+{
+    rotation = 90;
+    mushroomStalkScale = [0.5, 0.5, 1];
+    mushroomCapPos = [0, 0, -0.5];
+    mushroomCapScale = [1, 0.4, 1];
+
+    CreateObjectStack("cylinder", position, rotation, xAxis, mushroomStalkScale, colorWhite);
+    
+    CreateObjectNoStack("sphere", mushroomCapPos, rotation, xAxis, mushroomCapScale, colorWhite);
+}
+
+function CreateSmallMushroom(position)
+{
+    rotation = 90;
+    mushroomSmallStalkScale = [0.5, 0.5, 0.5];
+    mushroomRoundCapPos = [0, 0, -0.3];
+    mushroomRoundCapScaleValue = 0.4;
+    mushroomRoundCapScale = [mushroomRoundCapScaleValue, mushroomRoundCapScaleValue, mushroomRoundCapScaleValue];
+
+    CreateObjectStack("cylinder", position, rotation, xAxis, mushroomSmallStalkScale, colorWhite);
+    
+    CreateObjectNoStack("sphere", mushroomRoundCapPos, rotation, xAxis, mushroomRoundCapScale, colorWhite);
+}
+
 function render(timestamp) {
     
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -580,43 +605,42 @@ function render(timestamp) {
 	
     // time
     timeSeconds = timestamp / 1000.0;
-	
-	
-	// Now let's draw a shape animated!
-	// You may be wondering where the texture coordinates are!
-	// We've modified the object.js to add in support for this attribute array!
 
+    // Object variables
+    var groundPos = [0, -4, 0];
+    var groundScale = [6,0.2,6];
 
-    var cubeTranslate = [0, -4, 0];
-    var cubeScale = [5,0.2,5];
+    var mushroom1Pos = [0, 0, 0];
 
-    var floatingCubeTranslate = [0, 3, 0];
-    var floatingCubeScale = [1, 1, 1]
+    var mushroomStalkScale = [0.5, 0.5, 1];
+    var mushroomSmallStalkScale = [0.5, 0.5, 0.5];
 
-    // init textures
-    SetTextureUse(1);
+    var mushroomCapPos = [0, 0, -0.5];
+    var mushroomRoundCapPos = [0, 0, -0.3];
+    var mushroomRoundCapScaleValue = 0.4;
+    var mushroomRoundCapScale = [mushroomRoundCapScaleValue, mushroomRoundCapScaleValue, mushroomRoundCapScaleValue];
 
-    // use texture index 1 for ground
-    MakeTextureActive(1, "texture1", gl.TEXTURE1);
-    CreateObjectStack("sphere", cubeTranslate, 0, xAxis, [cubeScale[0], 0., cubeScale[2]], colorGrassGreen);
+    var mushroomCapScaleValue = 0.4;
+    var mushroomCapScale = [1, 0.4, 1];
 
-    // do not texture object
+    // do not use textures
     SetTextureUse(0);
-    CreateObjectFullStack("cylinder", [0, -0.5, 0], 90, xAxis, [10.1, 10.1, 1], colorWhite);
-    CreateObjectFullStack("sphere", [3, 3, 0], 0, xAxis, [1,1,1], colorBlue);
-    CreateObjectFullStack("cube", [2, 7, 1], 25, xAxis, [1,1.3,1], colorWhite);
-    CreateObjectFullStack("cone", [-2, 4, -1], 25, xAxis, [1,1,1], colorRed);
 
-    // cube texture, using texture index 0
-    SetTextureUse(1);
-    MakeTextureActive(0, "texture0", gl.TEXTURE0);
+    // create ground
+    CreateObjectStack("cube", groundPos, 0, xAxis, [groundScale[0], groundScale[1], groundScale[2]], colorGrassGreen);
+        
     gPush();
-        CreateObjectStack("cube", floatingCubeTranslate, 0, xAxis, floatingCubeScale, colorWhite);
+        CreateMushroom(mushroom1Pos);
+    gPop();
+
+    gTranslate(3, 0, 0);
+    
+    gPush();
+        CreateSmallMushroom(mushroom1Pos);
     gPop();
 
     // do not use textures
     SetTextureUse(0);
-    
 
     console.log(timeSeconds);
 	
