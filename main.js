@@ -46,6 +46,10 @@ var resetTimerFlag = true;
 var animFlag = false;
 var controller;
 
+// toggle view angle with button
+var viewIndex = 0;
+var viewCount = 8;
+
 var useTextures = 1; // indicate whether or not to draw textures at a particular moment
 
 // These are used to store the current state of objects.
@@ -354,6 +358,11 @@ window.onload = function init() {
         }
     };
 
+    document.getElementById("viewToggleButton").onclick = function () {
+        viewIndex++;
+        viewIndex = viewIndex % viewCount;
+    };
+
     var controller = new CameraController(canvas);
     controller.onchange = function(xRot,yRot) {
         RX = xRot ;
@@ -566,7 +575,10 @@ function render(timestamp) {
     eyeX = center[0] + radius * Math.sin(radians(timestamp*rotateFactor));
     eyeZ = center[2] + radius * Math.cos(radians(timestamp*rotateFactor));
 
-    eye = vec3(eyeX, 2, eyeZ);
+    // eye angle list
+    eyeAngleList = [0, 1, 2, 5, 90, -5, -2, -1];
+
+    eye = vec3(eyeX, eyeAngleList[viewIndex], eyeZ);
     //eye = vec3(0, 5, 10);
 
     MS = []; // Initialize modeling matrix stack
