@@ -624,17 +624,6 @@ function render(timestamp) {
 
     var mushroom1Pos = [0, 0, 0];
 
-    var mushroomStalkScale = [0.5, 0.5, 1];
-    var mushroomSmallStalkScale = [0.5, 0.5, 0.5];
-
-    var mushroomCapPos = [0, 0, -0.5];
-    var mushroomRoundCapPos = [0, 0, -0.3];
-    var mushroomRoundCapScaleValue = 0.4;
-    var mushroomRoundCapScale = [mushroomRoundCapScaleValue, mushroomRoundCapScaleValue, mushroomRoundCapScaleValue];
-
-    var mushroomCapScaleValue = 0.4;
-    var mushroomCapScale = [1, 0.4, 1];
-
     // do not use textures
     SetTextureUse(0);
 
