@@ -292,7 +292,7 @@ function loadImageTexture(tex, image) {
 // Store textures
 function initTexturesForExample() {
     textureArray.push({}) ;
-    loadFileTexture(textureArray[textureArray.length-1],"textures/brick.png") ;
+    loadFileTexture(textureArray[textureArray.length-1],"textures/mushroom-top.png") ;
 
     textureArray.push({}) ;
     loadFileTexture(textureArray[textureArray.length-1],"textures/grass.jpg") ;
@@ -530,6 +530,18 @@ function SetTextureUse(value)
     gl.uniform1i(gl.getUniformLocation(program, "useTextures"), useTextures);
 }
 
+
+/**
+* 
+// use texture index 0
+gl.uniform1i(gl.getUniformLocation(program, "textureIndex"), 0);
+
+// first cube texture
+gl.activeTexture(gl.TEXTURE0);
+gl.bindTexture(gl.TEXTURE_2D, textureArray[0].textureWebGL);
+gl.uniform1i(gl.getUniformLocation(program, "texture0"), 0);
+* 
+*/
 function MakeTextureActive(textureIndex, textureVariable, activeTexture)
 {
     textureArrayIndex = textureIndex; // keep this name different
@@ -551,9 +563,11 @@ function CreateMushroom(position, color)
     // compensate for mushroom height
     gTranslate(0, 0.7, 0);
 
+    SetTextureUse(0);
     CreateObjectStack("cylinder", position, rotation, xAxis, mushroomStalkScale, colorWhite);
-    
+    SetTextureUse(1);
     CreateObjectNoStack("sphere", mushroomCapPos, rotation, xAxis, mushroomCapScale, color);
+    SetTextureUse(0);
 }
 
 function CreateSmallMushroom(position)
@@ -657,7 +671,10 @@ function render(timestamp) {
 
     // create ground
     CreateObjectStack("cube", groundPos, 0, xAxis, [groundScale[0], groundScale[1], groundScale[2]], colorGrassGreen);
-        
+
+    SetTextureUse(1);
+    MakeTextureActive(0, "texture0", gl.TEXTURE0);
+
     gPush();
         CreateMushroom(mushroomPosList[0], colorWhite);
     gPop();
@@ -689,8 +706,6 @@ function render(timestamp) {
     gPush();
         CreateMushroom(mushroomPosList[7], colorWhite);
     gPop();
-
-    
 
     // do not use textures
     SetTextureUse(0);
