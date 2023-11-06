@@ -36,71 +36,71 @@
 
 <script id="fragment-shader" type="x-shader/x-fragment">#version 300 es
 
-// Fragment Shader
+    precision mediump float;
 
-precision mediump float;
+    in vec3 fPos;
+    in vec3 fNormal;
+    in vec2 fTexCoord;
 
-in vec3 fPos;
-in vec3 fNormal;
-in vec2 fTexCoord;
+    // texture variables
+    uniform sampler2D texture0;
+    uniform sampler2D texture1;
+    uniform sampler2D texture2;
+    uniform int useTextures;
+    uniform int textureIndex;
 
-// texture variables
-uniform sampler2D texture0;
-uniform sampler2D texture1;
-uniform sampler2D texture2;
-uniform int useTextures;
-uniform int textureIndex;
+    uniform vec4 ambientProduct, diffuseProduct, specularProduct;
+    uniform vec4 lightPosition;
+    uniform float shininess;
 
-uniform vec4 ambientProduct, diffuseProduct, specularProduct;
-uniform vec4 lightPosition;
-uniform float shininess;
+    layout(location=0) out vec4 fragColor;
 
-layout(location=0) out vec4 fragColor;
+    void main() {
 
-void main() {
+        // Normalize interpolated normal
+        vec3 N = normalize(fNormal);
 
-    // Normalize interpolated normal
-    vec3 N = normalize(fNormal);
+        // Vector from fragment position to light source
+        vec3 L = normalize(lightPosition.xyz - fPos);
+        
+        vec3 V = normalize(-fPos);
+        
+        // Halfway vector for Blinn-Phong 
+        vec3 H = normalize(L + V); 
 
-    // Vector from fragment position to light
-    vec3 L = normalize(lightPosition.xyz - fPos);
-    
-    // Vector from fragment position to eye (assuming the eye is at the origin)
-    vec3 V = normalize(-fPos);
-    
-    // Reflected light vector
-    vec3 R = reflect(-L, N);
+        // diffuse component
+        float lightDotNormal = max(dot(L, N), 0.0);
+        vec4 diffuse = diffuseProduct * lightDotNormal;
 
-    // Compute diffuse component
-    float lightDotNormal = max( dot(L, N), 0.0);
-    vec4 diffuse = vec4(0.0, 0.0, 0.0, 1.0);
-    diffuse = diffuseProduct * lightDotNormal;
+        // Compute Blinn-Phong specular component
+        float specularCoefficient = pow(max(dot(N, H), 0.0), shininess);
+        vec4 specular = vec4(0.0, 0.0, 0.0, 0.0); // Initialize specular to black
 
-    // Compute specular component
-    vec4 specular = specularProduct * pow( max(dot(R, V), 0.0), shininess);
-
-    // If the surface is facing away from the light source, there's no specular component
-    if( dot(L, N) < 0.0 ) {
-        specular = vec4(0.0, 0.0, 0.0, 1.0);
-    }
-
-    // summation of components to fragment color
-    fragColor = ambientProduct + diffuse + specular;
-
-    // TODO: make lighting happen on textures
-    if( useTextures == 1)
-    {
-        if (textureIndex == 0)
+        // Check if the surface is lit by the light source
+        if(lightDotNormal > 0.0) 
         {
-            fragColor = texture( texture0, fTexCoord );
+            specular = specularProduct * specularCoefficient;
         }
         
-        if (textureIndex == 1)
+        // Combine the lighting components
+        vec4 surfaceColor = ambientProduct + diffuse + specular;
+
+        // Also apply lighting to textured surfaces
+        if(useTextures == 1) 
         {
-            fragColor = texture( texture1, fTexCoord );
+            if (textureIndex == 0) 
+            {
+                surfaceColor *= texture(texture0, fTexCoord);
+            } 
+            else if (textureIndex == 1) 
+            {
+                surfaceColor *= texture(texture1, fTexCoord);
+            }
         }
+        
+        // Output the final color
+        fragColor = surfaceColor;
     }
-}
 
 </script>
 
