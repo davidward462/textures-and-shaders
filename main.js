@@ -594,7 +594,7 @@ function render(timestamp) {
     center = [0, 0, 0];
     angle = 0;
     radius = 10;
-    rotateFactor = 0.05;
+    rotateFactor = 0.02;
     eyeX = center[0] + radius * Math.sin(radians(timestamp*rotateFactor));
     eyeZ = center[2] + radius * Math.cos(radians(timestamp*rotateFactor));
 
