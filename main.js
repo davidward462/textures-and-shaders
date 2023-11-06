@@ -296,7 +296,7 @@ function loadImageTexture(tex, image) {
 // Store textures
 function initTexturesForExample() {
     textureArray.push({}) ;
-    loadFileTexture(textureArray[textureArray.length-1],"textures/mushroom-top.png") ;
+    loadFileTexture(textureArray[textureArray.length-1],"textures/darkblue.png") ;
     
     textureArray.push({}) ;
     loadImageTexture(textureArray[textureArray.length-1],imageGrass) ;
