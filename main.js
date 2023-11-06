@@ -47,7 +47,7 @@ var animFlag = false;
 var controller;
 
 // toggle view angle with button
-var viewIndex = 2;
+var viewIndex = 4;
 var viewCount = 8;
 
 var useTextures = 1; // indicate whether or not to draw textures at a particular moment
@@ -79,34 +79,38 @@ var colorMidnightBlue = vec4(0.0,0.20,0.40, 1.0);
 
 //making a texture image procedurally
 //Let's start with a 1-D array
-var texSize = 8;
-var imageCheckerBoardData = new Array();
+var texSize = 32;
+var imageGrassData = new Array();
 
 // Now for each entry of the array make another array
 // 2D array now!
 for (var i =0; i<texSize; i++)
-	imageCheckerBoardData[i] = new Array();
+	imageGrassData[i] = new Array();
 
 // Now for each entry in the 2D array make a 4 element array (RGBA! for colour)
 for (var i =0; i<texSize; i++)
 	for ( var j = 0; j < texSize; j++)
-		imageCheckerBoardData[i][j] = new Float32Array(4);
+		imageGrassData[i][j] = new Float32Array(4);
 
 // Now for each entry in the 2D array let's set the colour.
 // We could have just as easily done this in the previous loop actually
+
+// EDITED: to be randomly generated grass texture
 for (var i =0; i<texSize; i++) 
 	for (var j=0; j<texSize; j++) {
-		var c = (i + j ) % 2;
-		imageCheckerBoardData[i][j] = [c, c, c, 1];
+        var h = 8;
+        c = Math.random() / h; // random color modifier 
+        var color = [0.15+c, 0.5 + c/2, 0.1+c]; // add random modifier to baseline color
+		imageGrassData[i][j] = [color[0], color[1], color[2], 1]; // set color on grid
 }
 
 //Convert the image to uint8 rather than float.
-var imageCheckerboard = new Uint8Array(4*texSize*texSize);
+var imageGrass = new Uint8Array(4*texSize*texSize);
 
 for (var i = 0; i < texSize; i++)
 	for (var j = 0; j < texSize; j++)
 	   for(var k =0; k<4; k++)
-			imageCheckerboard[4*texSize*i+4*j+k] = 255*imageCheckerBoardData[i][j][k];
+			imageGrass[4*texSize*i+4*j+k] = 255*imageGrassData[i][j][k];
 		
 // For this example we are going to store a few different textures here
 var textureArray = [] ;
@@ -295,7 +299,7 @@ function initTexturesForExample() {
     loadFileTexture(textureArray[textureArray.length-1],"textures/mushroom-top.png") ;
     
     textureArray.push({}) ;
-    loadImageTexture(textureArray[textureArray.length-1],imageCheckerboard) ;
+    loadImageTexture(textureArray[textureArray.length-1],imageGrass) ;
 }
 
 window.onload = function init() {
