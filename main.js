@@ -762,7 +762,8 @@ function render(timestamp) {
 
     // begin gnome
     var gnomePos = [0.5, 1, 0.5];
-    var gnomeHeadPos = [0, 0, 0];
+    var gnomeHeadPos = [0, 2, 0];
+    var gnomeEyeHeight = 0;
 
     var headYOffset = 1 + 0.7 * 0.7 / 2; // Body height plus half of head height (since scale is uniform for sphere)
     var hatYOffset = headYOffset + 0.4 * 0.4 + 0.2 + 0.1; // Top of head plus hat height
@@ -785,45 +786,42 @@ function render(timestamp) {
 
 
                 gPush(); // Hat
-                    // Adjust hat position based on body and head height and hat's own height
-                    CreateObjectStack("cone", [0, hatYOffset + 0.3, 0], -90, [1, 0, 0], [0.5, 0.5, 0.5], colorRed);
+                    CreateObjectStack("cone", [0, 1, 0], -90, [1, 0, 0], [0.5, 0.5, 0.5], colorRed);
                 gPop(); // End hat
 
-                gPush(); // Left Eyes
-                    // Adjust head position based on body height and head's own offset
-                    CreateObjectStack("sphere", [0+0.4, headYOffset + 0.3, 0], 0, [1, 0, 0], [0.2, 0.2, 0.2], colorWhite);
-                gPop(); // End Eyes
+                gPush(); // Left Eye
+                    CreateObjectStack("sphere", [0+0.4, gnomeEyeHeight, 0], 0, [1, 0, 0], [0.2, 0.2, 0.2], colorWhite);
 
-                gPush(); // Right Eyes
-                    // Adjust head position based on body height and head's own offset
-                    CreateObjectStack("sphere", [0.3, headYOffset + 0.3, 0.3], 0, [1, 0, 0], [0.2, 0.2, 0.2], colorWhite);
-                gPop(); // End Eyes
+                    gPush(); // Left pupil
+                        CreateObjectStack("sphere", [0+0.4, 0, 0+0.5], 0, [1, 0, 0], [0.1, 0.1, 0.1], colorBlack);
+                    gPop(); // End pupil 
+                gPop(); // End Eye
+
+                gPush(); // Right Eye
+                    CreateObjectStack("sphere", [0.3, gnomeEyeHeight, 0.3], 0, [1, 0, 0], [0.2, 0.2, 0.2], colorWhite);
+
+                    gPush(); // Right pupil
+                        CreateObjectStack("sphere", [0.3+0.3, 0, 0.3 - 0.2], 0, [1, 0, 0], [0.1, 0.1, 0.1], colorBlack);
+                    gPop(); // End pupil
+
+                gPop(); // End Eye
                 
-                gPush(); // Left Eyes
-                    // Adjust head position based on body height and head's own offset
-                    CreateObjectStack("sphere", [0+0.4, headYOffset + 0.3, 0+0.5], 0, [1, 0, 0], [0.1, 0.1, 0.1], colorBlack);
-                gPop(); // End Eyes
-
-                gPush(); // Right Eyes
-                    // Adjust head position based on body height and head's own offset
-                    CreateObjectStack("sphere", [0.3+0.3, headYOffset + 0.3, 0.3 - 0.2], 0, [1, 0, 0], [0.1, 0.1, 0.1], colorBlack);
-                gPop(); // End Eyes
-
             gPop(); // End head
+
+            gPush(); // Left leg
+                // Left arm X position is body width plus half arm width to the left
+                CreateObjectStack("cube", [leftArmXOffset, 0.5, 0], 0, [0, 0, 1], [0.15, 0.29, 0.15], colorWhite);
+            gPop(); // End left arm
+            
+            gPush(); // Right leg
+                // Right arm X position is body width plus half arm width to the right
+                CreateObjectStack("cube", [rightArmXOffset, 0.5, 0], 0, [0, 0, 1], [0.15, 0.29, 0.15], colorWhite);
+            gPop(); // End right arm
 
         gPop(); // End body
         
         // Repeat similar structure for arms and legs with correct positioning
         
-        gPush(); // Left leg
-            // Left arm X position is body width plus half arm width to the left
-            CreateObjectStack("cube", [leftArmXOffset, 0.5, 0], 0, [0, 0, 1], [0.15, 0.29, 0.15], colorWhite);
-        gPop(); // End left arm
-        
-        gPush(); // Right leg
-            // Right arm X position is body width plus half arm width to the right
-            CreateObjectStack("cube", [rightArmXOffset, 0.5, 0], 0, [0, 0, 1], [0.15, 0.29, 0.15], colorWhite);
-        gPop(); // End right arm
         
 
     gPop(); // End gnome frame
