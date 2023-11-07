@@ -76,6 +76,8 @@ var colorBlue = vec4(0.0, 0.0, 1.0, 1.0);
 var colorSkyBlue = vec4(0.5, 0.5, 1.0, 1.0);
 var colorGrassGreen = vec4(0.24,0.57,0.25, 1.0);
 var colorMidnightBlue = vec4(0.0,0.20,0.40, 1.0);
+var colorAlmond = vec4(0.94, 0.87, 0.8);
+var colorDarkBrown = vec4(0.4, 0.26, 0.13);
 
 //making a texture image procedurally
 //Let's start with a 1-D array
@@ -761,7 +763,7 @@ function render(timestamp) {
 
 
     // begin gnome
-    var gnomePos = [0.5, 3, 0.5];
+    var gnomePos = [0.5, 2, 0.5];
     var gnomeBodyScale = [0.7, 0.7, -0.9];
 
     var gnomeHeadPos = [0, 0.5, 0];
@@ -771,12 +773,12 @@ function render(timestamp) {
     var gnomeHatPos = [0, 0.8, 0];
     
     var gnomeEyeHeight = 0;
-    var gnomeLeftEyePos = [0.3, gnomeEyeHeight, 0.25];
-    var gnomeRightEyePos = [0.3, gnomeEyeHeight, -0.25];
+    var gnomeLeftEyePos = [0.4, gnomeEyeHeight, 0.2];
+    var gnomeRightEyePos = [0.4, gnomeEyeHeight, -0.2];
     var gnomeEyeScale = [0.2, 0.2, 0.2];
     
     var gnomePupilScale = [0.5, 0.5, 0.5];
-    var gnomePupilPos = [1, 0, 0];
+    var gnomePupilPos = [0.7, 0, 0];
     
     var gnomeLegScale = [0.15, 0.3, 0.15];
     var gnomeLegHeight = -0.7;
@@ -787,15 +789,15 @@ function render(timestamp) {
 
         gPush(); // Gnome body
             // Cone as the body needs no initial rotation if it's meant to stand upright.
-            CreateObjectStack("cone", gnomePos, 90, xAxis, gnomeBodyScale, colorBlue);
+            CreateObjectStack("cone", gnomePos, 90, xAxis, gnomeBodyScale, colorDarkBrown);
 
             gRotate(-90, 1, 0, 0);
             gPush(); // Head
                 // Adjust head position based on body height and head's own offset
-                CreateObjectStack("sphere", gnomeHeadPos, 0, xAxis, gnomeHeadScale, colorWhite);
+                CreateObjectStack("sphere", gnomeHeadPos, 0, xAxis, gnomeHeadScale, colorAlmond);
 
                 gPush(); // Hat
-                    CreateObjectStack("cone", gnomeHatPos, -90, xAxis, gnomeHatScale, colorRed);
+                    CreateObjectStack("cone", gnomeHatPos, -90, xAxis, gnomeHatScale, colorBlue);
                 gPop(); // End hat
 
                 gPush(); // Left Eye
@@ -818,15 +820,19 @@ function render(timestamp) {
                 
             gPop(); // End head
 
-            gPush(); // Left leg
-                // Left arm X position is body width plus half arm width to the left
-                CreateObjectStack("cube", gnomeLeftLegPos, 0, xAxis, gnomeLegScale, colorWhite);
-            gPop(); // End left arm
-            
-            gPush(); // Right leg
-                // Right arm X position is body width plus half arm width to the right
-                CreateObjectStack("cube", gnomeRightLegPos, 0, xAxis, gnomeLegScale, colorWhite);
-            gPop(); // End right arm
+            gPush();
+                gRotate(90, 0, 1, 0);
+                gPush(); // Left leg
+                    // Left arm X position is body width plus half arm width to the left
+                    CreateObjectStack("cube", gnomeLeftLegPos, 0, xAxis, gnomeLegScale, colorWhite);
+                gPop(); // End left arm
+                
+                gPush(); // Right leg
+                    // Right arm X position is body width plus half arm width to the right
+                    CreateObjectStack("cube", gnomeRightLegPos, 0, xAxis, gnomeLegScale, colorWhite);
+                gPop(); // End right arm
+            gPop();
+
 
         gPop(); // End body
         
