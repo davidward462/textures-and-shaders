@@ -63,7 +63,7 @@ noTranslate = zeroVector;
 noScale = zeroVector;8
 xAxis = [1, 0, 0];
 yAxis = [0, 1 ,0];
-zAxix = [0, 0, 1];
+zAxis = [0, 0, 1];
 
 
 // Colors
@@ -614,8 +614,8 @@ function render(timestamp) {
     // eye angle list
     eyeAngleList = [0, 1, 2, 5, 90, -5, -2, -1];
 
-    eye = vec3(eyeX, eyeAngleList[viewIndex], eyeZ);
-    //eye = vec3(0, 5, 10);
+    //eye = vec3(eyeX, eyeAngleList[viewIndex], eyeZ);
+    eye = vec3(0, 5, 10);
 
     MS = []; // Initialize modeling matrix stack
 	
@@ -680,11 +680,9 @@ function render(timestamp) {
         mushroom8Pos
     ];
 
-    SetTextureUse(0);
-
     // butterfly
     bfPos = [0, 0, 0];
-    bfAngle = 0;
+    bfAngle = -20;
     bfScaleConst = 1;
     bfBodyScale = [0.3 * bfScaleConst, 1 * bfScaleConst, 0.3 * bfScaleConst]; 
     bfLeftWingPos = [0.7, 0, 0];
@@ -695,10 +693,25 @@ function render(timestamp) {
     bfWingDistance = 50;
     bfWingSpeed = 3;
     bfWingOffset = 0.8;
+    bfHeightFactor = 0.5;
+    bfHeightDivisor = 6;
+    bfLeftEyePos = [0, 0, 0];
+    bfRightEyePos = [0, 0, 0];
+    bfEyeScale = [1, 0.2, 0.2];
+
+    SetTextureUse(0);
 
     //body
     gPush();
-        CreateObjectStack("sphere", bfPos, bfAngle, xAxis, bfBodyScale, colorBlue);
+
+        // fluctuate position in the air
+        bfPos[1] = bfHeightFactor * Math.cos( radians(timestamp) / bfHeightDivisor);
+
+        // move across screen
+        bfPos[0] += timestamp/1000.0;
+
+        CreateObjectStack("sphere", bfPos, bfAngle, zAxis, bfBodyScale, colorBlue);
+
         
         // wings
         gPush();
