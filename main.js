@@ -675,7 +675,7 @@ function render(timestamp) {
     ];
 
     // butterfly
-    var bfPos = [-5, 7, 0];
+    var bfPos = [-5, 8, 1];
     var bfAngle = -20;
     var bfBodyScale = [0.3, 0.8, 0.3];
     var bfWingScale = [0.5, 0.1, 1];
@@ -763,7 +763,7 @@ function render(timestamp) {
 
 
     // begin gnome
-    var gnomePos = [0.5, 2, 0.5];
+    var gnomePos = [0.5, 2, -1];
     var gnomeBodyScale = [0.7, 0.7, -0.9];
 
     var gnomeHeadPos = [0, 0.5, 0];
@@ -785,15 +785,22 @@ function render(timestamp) {
     var gnomeLeftLegPos = [-0.3, gnomeLegHeight, 0];
     var gnomeRightLegPos = [0.3, gnomeLegHeight, 0];
 
-    var a = -1;
-    var b = 4;
-    var c = 2;
+    // parabola
+    var a = -7;
+    var b = 3;
+    var c = 1;
 
     gPush(); // Gnome frame
 
         // gnome jumps in the form of a parabola
-        let x = (timestamp / 1000.0) % 4.0; // loop x value (time)
+        let x = (timestamp / 1000.0) % 2.0; // loop x value (time)
         let y = a * Math.pow(x - c, 2) + b; // parabola
+
+        // keep gnome above ground
+        if (y <= 0)
+        {
+            y = 0;
+        }
         gnomePos[1] = y + 2;
 
         gPush(); // Gnome body
@@ -848,8 +855,7 @@ function render(timestamp) {
     gPop(); // End gnome frame
 
     console.log(timeSeconds);
-	
-    
+
     if( animFlag )
         window.requestAnimFrame(render);
 }
