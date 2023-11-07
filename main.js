@@ -771,7 +771,8 @@ function render(timestamp) {
     var gnomeHatPos = [0, 0.8, 0];
     
     var gnomeEyeHeight = 0;
-    var gnomeEyePos = [0.3, gnomeEyeHeight, 0.3];
+    var gnomeLeftEyePos = [0.3, gnomeEyeHeight, 0.25];
+    var gnomeRightEyePos = [0.3, gnomeEyeHeight, -0.25];
     var gnomeEyeScale = [0.2, 0.2, 0.2];
     
     var gnomePupilScale = [0.5, 0.5, 0.5];
@@ -781,12 +782,6 @@ function render(timestamp) {
     var gnomeLegHeight = -0.7;
     var gnomeLeftLegPos = [-0.3, gnomeLegHeight, 0];
     var gnomeRightLegPos = [0.3, gnomeLegHeight, 0];
-
-    var headYOffset = 1 + 0.7 * 0.7 / 2; // Body height plus half of head height (since scale is uniform for sphere)
-    var hatYOffset = headYOffset + 0.4 * 0.4 + 0.2 + 0.1; // Top of head plus hat height
-    var headYOffset = 1 + 0.7 * 0.7 / 2; // Body height plus half of head height (since scale is uniform for sphere)
-    var leftArmXOffset = -(0.7 / 2 + 0.15 / 2);
-    var rightArmXOffset = (0.7 / 2 + 0.15 / 2);
 
     gPush(); // Gnome frame
 
@@ -804,7 +799,7 @@ function render(timestamp) {
                 gPop(); // End hat
 
                 gPush(); // Left Eye
-                    CreateObjectNoStack("sphere", gnomeEyePos, 0, xAxis, gnomeEyeScale, colorWhite);
+                    CreateObjectNoStack("sphere", gnomeLeftEyePos, 0, xAxis, gnomeEyeScale, colorWhite);
 
                     gPush(); // Left pupil
                         CreateObjectStack("sphere", gnomePupilPos, 0, xAxis, gnomePupilScale, colorBlack);
@@ -812,6 +807,14 @@ function render(timestamp) {
 
                 gPop(); // End Eye
 
+                gPush(); // Right Eye
+                    CreateObjectNoStack("sphere", gnomeRightEyePos, 0, xAxis, gnomeEyeScale, colorWhite);
+
+                    gPush(); // Right pupil
+                        CreateObjectStack("sphere", gnomePupilPos, 0, xAxis, gnomePupilScale, colorBlack);
+                    gPop(); // End pupil 
+
+                gPop(); // End Eye
                 
             gPop(); // End head
 
