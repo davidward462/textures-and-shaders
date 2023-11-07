@@ -765,7 +765,8 @@ function render(timestamp) {
     var gnomeBodyScale = [0.9, 0.9, 0.9];
     var gnomeHeadPos = [0, 2, 0];
     var gnomeHeadScale = [0.5, 0.5, 0.5];
-    var gnomeHatScale = [0.5, 0.5, 0.5];
+    var gnomeHatScale = [0.5, 0.5, 1];
+    var gnomeHatPos = [0, 0.8, 0];
     var gnomeEyeHeight = 0;
     var gnomeEyeScale = [0.2, 0.2, 0.2];
     var gnomePupilScale = 0;
@@ -788,7 +789,7 @@ function render(timestamp) {
                 CreateObjectStack("sphere", gnomeHeadPos, 0, xAxis, gnomeHeadScale, colorWhite);
 
                 gPush(); // Hat
-                    CreateObjectStack("cone", [0, 1, 0], -90, xAxis, gnomeHatScale, colorRed);
+                    CreateObjectStack("cone", gnomeHatPos, -90, xAxis, gnomeHatScale, colorRed);
                 gPop(); // End hat
 
                 gPush(); // Left Eye
