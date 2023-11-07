@@ -785,7 +785,16 @@ function render(timestamp) {
     var gnomeLeftLegPos = [-0.3, gnomeLegHeight, 0];
     var gnomeRightLegPos = [0.3, gnomeLegHeight, 0];
 
+    var a = -1;
+    var b = 4;
+    var c = 2;
+
     gPush(); // Gnome frame
+
+        // gnome jumps in the form of a parabola
+        let x = (timestamp / 1000.0) % 4.0; // loop x value (time)
+        let y = a * Math.pow(x - c, 2) + b; // parabola
+        gnomePos[1] = y + 2;
 
         gPush(); // Gnome body
             // Cone as the body needs no initial rotation if it's meant to stand upright.
