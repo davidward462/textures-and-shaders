@@ -763,7 +763,7 @@ function render(timestamp) {
 
 
     // begin gnome
-    gnomePos = [0.5, 1, 0.5];
+    gnomePos = [0.5, 0.7, 0.5];
 
     gPush(); // Gnome frame
         // Translate the entire gnome frame to the position
