@@ -614,8 +614,8 @@ function render(timestamp) {
     // eye angle list
     eyeAngleList = [0, 1, 2, 5, 90, -5, -2, -1];
 
-    //eye = vec3(eyeX, eyeAngleList[viewIndex], eyeZ);
-    eye = vec3(0, 5, 10);
+    eye = vec3(eyeX, eyeAngleList[viewIndex], eyeZ);
+    //eye = vec3(0, 5, 10);
 
     MS = []; // Initialize modeling matrix stack
 	
@@ -655,19 +655,20 @@ function render(timestamp) {
     timeSeconds = timestamp / 1000.0;
 
     // Object variables
-    var groundPos = [0, -4, 0];
-    var groundScale = [6,0.2,6];
+    var groundPos = [0, -5, 0];
+    var groundScale = [6,1,6];
 
     var ringRadius = 4.5;
+    var mushroomWorldHeight = 0.7;
 
-    var mushroom1Pos = [ringRadius, 0, 0];
-    var mushroom2Pos = [-ringRadius, 0, 0];
-    var mushroom3Pos = [0, 0, ringRadius];
-    var mushroom4Pos = [0, 0, -ringRadius];
-    var mushroom5Pos = [4, 0, 3];
-    var mushroom6Pos = [-4, 0, -3];
-    var mushroom7Pos = [-3, 0, 4];
-    var mushroom8Pos = [3, 0, -4];
+    var mushroom1Pos = [ringRadius, mushroomWorldHeight, 0];
+    var mushroom2Pos = [-ringRadius, mushroomWorldHeight, 0];
+    var mushroom3Pos = [0, mushroomWorldHeight, ringRadius];
+    var mushroom4Pos = [0, mushroomWorldHeight, -ringRadius];
+    var mushroom5Pos = [4, mushroomWorldHeight, 3];
+    var mushroom6Pos = [-4, mushroomWorldHeight, -3];
+    var mushroom7Pos = [-3, mushroomWorldHeight, 4];
+    var mushroom8Pos = [3, mushroomWorldHeight, -4];
 
     var mushroomPosList = [
         mushroom1Pos,
@@ -707,7 +708,7 @@ function render(timestamp) {
         bfPos[1] = bfHeightFactor * Math.cos( radians(timestamp) / bfHeightDivisor);
 
         // move across screen
-        bfPos[0] += timestamp/(bfTranslateConst * 1000.0);
+        bfPos[0] += timestamp / (bfTranslateConst * 1000.0);
 
         CreateObjectStack("sphere", bfPos, bfAngle, zAxis, bfBodyScale, colorBlue);
 
@@ -715,7 +716,7 @@ function render(timestamp) {
         // wings
         gPush();
             gRotate(90, 1, 0, 0);
-            bfLeftWingAngle[0] = bfWingDistance*Math.cos( radians(timestamp) /bfWingSpeed);
+            bfLeftWingAngle[0] = bfWingDistance*Math.cos( radians(timestamp) / bfWingSpeed);
             gRotate(bfLeftWingAngle[0], 0, 0, 1);
             gRotate(90, 0, 0, 1)
             // translate so joint was where center had been rotating
@@ -731,7 +732,7 @@ function render(timestamp) {
 
         gPush();
             gRotate(90, 1, 0, 0);
-            bfRightWingAngle[0] = bfWingDistance*Math.sin( radians(timestamp) /bfWingSpeed);
+            bfRightWingAngle[0] = bfWingDistance*Math.sin( radians(timestamp) / bfWingSpeed);
             gRotate(bfRightWingAngle[0], 0, 0, 1);
             gRotate(90, 0, 0, 1)
             // translate so joint was where center had been rotating
