@@ -675,7 +675,7 @@ function render(timestamp) {
     ];
 
     // butterfly
-    bfPos = [-5, 0, 0];
+    bfPos = [-5, 7, 0];
     bfAngle = -20;
     bfScaleConst = 1;
     bfBodyScale = [0.3 * bfScaleConst, 1 * bfScaleConst, 0.3 * bfScaleConst];
@@ -692,13 +692,21 @@ function render(timestamp) {
     bfEyeScale = [1, 0.2, 0.2];
     bfTranslateConst = 1.5;
 
+    
+
+    // use textures
+    SetTextureUse(1);
+    MakeTextureActive(1, "texture1", gl.TEXTURE1);
+    CreateObjectStack("cube", groundPos, 0, xAxis, [groundScale[0], groundScale[1], groundScale[2]], colorGrassGreen);
+    MakeTextureActive(0, "texture0", gl.TEXTURE0);
+
     SetTextureUse(0);
 
     //body
     gPush();
 
         // fluctuate position in the air
-        bfPos[1] = bfHeightFactor * Math.cos( radians(timestamp) / bfHeightDivisor);
+        bfPos[1] += bfHeightFactor * Math.cos( radians(timestamp) / bfHeightDivisor);
 
         // move across screen
         bfPos[0] += timestamp / (bfTranslateConst * 1000.0);
@@ -741,11 +749,7 @@ function render(timestamp) {
     gPop();
 
 
-    // use textures
-    SetTextureUse(1);
-    MakeTextureActive(1, "texture1", gl.TEXTURE1);
-    CreateObjectStack("cube", groundPos, 0, xAxis, [groundScale[0], groundScale[1], groundScale[2]], colorGrassGreen);
-    MakeTextureActive(0, "texture0", gl.TEXTURE0);
+    
 
     gPush();
         CreateMushroom(mushroomPosList[0], colorWhite);
