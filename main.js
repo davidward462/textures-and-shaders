@@ -47,7 +47,7 @@ var animFlag = false;
 var controller;
 
 // toggle view angle with button
-var viewIndex = 4;
+var viewIndex = 2;
 var viewCount = 8;
 
 var useTextures = 1; // indicate whether or not to draw textures at a particular moment
@@ -503,6 +503,19 @@ function CreateObjectStack(shape, translate, rotate, rotateAxis, scale, color)
 }
 
 // Apply translate, rotate, scale, and color to draw a shape.
+function CreateObjectStackAnimate(shape, translate, rotate, rotateAxis, scale, color, timestep)
+{
+    gTranslate(translate[0], translate[1], translate[2]);
+    gRotate(rotate, rotateAxis[0], rotateAxis[1], rotateAxis[2]);
+    
+    gPush();
+        setColor(color);
+        gScale(scale[0], scale[1], scale[2]);
+        DrawShape(shape);
+    gPop();
+}
+
+// Apply translate, rotate, scale, and color to draw a shape.
 function CreateObjectFullStack(shape, translate, rotate, rotateAxis, scale, color)
 {
     gPush();
@@ -667,11 +680,69 @@ function render(timestamp) {
         mushroom8Pos
     ];
 
-    // do not use textures
+    SetTextureUse(0);
+
+    // butterfly
+    bfPos = [0, 0, 0];
+    bfAngle = 0;
+    bfScaleConst = 1;
+    bfBodyScale = [0.3 * bfScaleConst, 1 * bfScaleConst, 0.3 * bfScaleConst]; 
+    bfLeftWingPos = [0.7, 0, 0];
+    bfRightWingPos = [0, 0, 0];
+    bfWingScale = [0.5, 0.1, 1];
+    bfLeftWingAngle = [0, 0, 0];
+    bfRightWingAngle = [0, 0, 0];
+    bfWingDistance = 50;
+    bfWingSpeed = 3;
+    bfWingOffset = 0.8;
+
+    //body
+    gPush();
+        CreateObjectStack("sphere", bfPos, bfAngle, xAxis, bfBodyScale, colorBlue);
+        
+        // wings
+        gPush();
+            gRotate(90, 1, 0, 0);
+            bfLeftWingAngle[0] = bfWingDistance*Math.cos( radians(timestamp) /bfWingSpeed);
+            gRotate(bfLeftWingAngle[0], 0, 0, 1);
+            gRotate(90, 0, 0, 1)
+            // translate so joint was where center had been rotating
+            gTranslate(bfWingOffset, 0, 0);
+            gPush();
+            {
+                setColor(colorWhite);
+                gScale(bfWingScale[0], bfWingScale[1], bfWingScale[2]);
+                drawCube();
+            }
+            gPop();
+        gPop();
+
+        gPush();
+            gRotate(90, 1, 0, 0);
+            bfRightWingAngle[0] = bfWingDistance*Math.sin( radians(timestamp) /bfWingSpeed);
+            gRotate(bfRightWingAngle[0], 0, 0, 1);
+            gRotate(90, 0, 0, 1)
+            // translate so joint was where center had been rotating
+            gTranslate(-bfWingOffset, 0, 0);
+            gPush();
+            {
+                setColor(colorWhite);
+                gScale(bfWingScale[0], bfWingScale[1], bfWingScale[2]);
+                drawCube();
+            }
+            gPop();
+        gPop();
+
+    //CreateObjectStack("cube", bfLeftWingPos, bfLeftWingAngle[0], xAxis, bfWingScale, colorWhite);
+    gPop();
+
+
+    // use textures
     SetTextureUse(1);
 
     MakeTextureActive(1, "texture1", gl.TEXTURE1);
 
+    
     // create ground
     CreateObjectStack("cube", groundPos, 0, xAxis, [groundScale[0], groundScale[1], groundScale[2]], colorGrassGreen);
 
