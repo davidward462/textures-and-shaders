@@ -597,7 +597,7 @@ function CreateSmallMushroom(position)
 
     CreateObjectStack("cylinder", position, rotation, xAxis, mushroomSmallStalkScale, colorWhite);
     
-    CreateObjectNoStack("sphere", mushroomRoundCapPos, rotation, xAxis, mushroomRoundCapScale, colorWhite);
+    CreateObjectNoStack("sphere", mushroomRoundCapPos, rotation, xAxis, mushroomRoundCapScale, colorRed);
 }
 
 function render(timestamp) {
@@ -661,24 +661,17 @@ function render(timestamp) {
     var ringRadius = 4.5;
     var mushroomWorldHeight = 0.7;
 
-    var mushroom1Pos = [ringRadius, mushroomWorldHeight, 0];
-    var mushroom2Pos = [-ringRadius, mushroomWorldHeight, 0];
-    var mushroom3Pos = [0, mushroomWorldHeight, ringRadius];
-    var mushroom4Pos = [0, mushroomWorldHeight, -ringRadius];
-    var mushroom5Pos = [4, mushroomWorldHeight, 3];
-    var mushroom6Pos = [-4, mushroomWorldHeight, -3];
-    var mushroom7Pos = [-3, mushroomWorldHeight, 4];
-    var mushroom8Pos = [3, mushroomWorldHeight, -4];
-
     var mushroomPosList = [
-        mushroom1Pos,
-        mushroom2Pos,
-        mushroom3Pos,
-        mushroom4Pos,
-        mushroom5Pos,
-        mushroom6Pos,
-        mushroom7Pos,
-        mushroom8Pos
+        [ringRadius, mushroomWorldHeight, 0],
+        [-ringRadius, mushroomWorldHeight, 0],
+        [0, mushroomWorldHeight, ringRadius],
+        [0, mushroomWorldHeight, -ringRadius],
+        [4, mushroomWorldHeight, 3],
+        [-4, mushroomWorldHeight, -3],
+        [-3, mushroomWorldHeight, 4],
+        [3, mushroomWorldHeight, -4],
+        [3, mushroomWorldHeight, -3],
+        [3, mushroomWorldHeight, 3]
     ];
 
     // butterfly
@@ -789,6 +782,14 @@ function render(timestamp) {
 
     gPush();
         CreateMushroom(mushroomPosList[7], colorWhite);
+    gPop();
+
+    gPush();
+        CreateSmallMushroom(mushroomPosList[8], colorWhite);
+    gPop();
+
+    gPush();
+        CreateSmallMushroom(mushroomPosList[9], colorWhite);
     gPop();
 
     // do not use textures
