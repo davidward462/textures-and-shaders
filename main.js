@@ -503,19 +503,6 @@ function CreateObjectStack(shape, translate, rotate, rotateAxis, scale, color)
 }
 
 // Apply translate, rotate, scale, and color to draw a shape.
-function CreateObjectStackAnimate(shape, translate, rotate, rotateAxis, scale, color, timestep)
-{
-    gTranslate(translate[0], translate[1], translate[2]);
-    gRotate(rotate, rotateAxis[0], rotateAxis[1], rotateAxis[2]);
-    
-    gPush();
-        setColor(color);
-        gScale(scale[0], scale[1], scale[2]);
-        DrawShape(shape);
-    gPop();
-}
-
-// Apply translate, rotate, scale, and color to draw a shape.
 function CreateObjectFullStack(shape, translate, rotate, rotateAxis, scale, color)
 {
     gPush();
@@ -598,6 +585,16 @@ function CreateSmallMushroom(position)
     CreateObjectStack("cylinder", position, rotation, xAxis, mushroomSmallStalkScale, colorWhite);
     
     CreateObjectNoStack("sphere", mushroomRoundCapPos, rotation, xAxis, mushroomRoundCapScale, colorRed);
+}
+
+function CreateLargeMushrooms(mushroomDataList, count)
+{
+    for(let i = 0; i < count; i++)
+    {
+        gPush();
+            CreateMushroom(mushroomDataList[i], colorWhite);
+        gPop();
+    }
 }
 
 function render(timestamp) {
@@ -749,39 +746,9 @@ function render(timestamp) {
     gPop();
 
 
-    
+    // iterate to create mushrooms
+    CreateLargeMushrooms(mushroomPosList, 8);
 
-    gPush();
-        CreateMushroom(mushroomPosList[0], colorWhite);
-    gPop();
-
-    gPush();
-        CreateMushroom(mushroomPosList[1], colorWhite);
-    gPop();
-
-    gPush();
-        CreateMushroom(mushroomPosList[2], colorWhite);
-    gPop();
-
-    gPush();
-        CreateMushroom(mushroomPosList[3], colorWhite);
-    gPop();
-
-    gPush();
-        CreateMushroom(mushroomPosList[4], colorWhite);
-    gPop();
-
-    gPush();
-        CreateMushroom(mushroomPosList[5], colorWhite);
-    gPop();
-
-    gPush();
-        CreateMushroom(mushroomPosList[6], colorWhite);
-    gPop();
-
-    gPush();
-        CreateMushroom(mushroomPosList[7], colorWhite);
-    gPop();
 
     gPush();
         CreateSmallMushroom(mushroomPosList[8], colorWhite);
@@ -793,6 +760,75 @@ function render(timestamp) {
 
     // do not use textures
     SetTextureUse(0);
+
+
+    // begin gnome
+    gnomePos = [0.5, 1, 0.5];
+
+    gPush(); // Gnome frame
+        // Translate the entire gnome frame to the position
+        gTranslate(gnomePos[0], gnomePos[1], gnomePos[2]);
+        
+        gPush(); // Gnome body
+            // Cone as the body needs no initial rotation if it's meant to stand upright.
+            CreateObjectStack("cone", [0, 1, 0], -90, [1, 0, 0], [0.9, 0.9, 0.9], colorBlue);
+        gPop(); // End body
+        
+        gPush(); // Head
+            // Adjust head position based on body height and head's own offset
+            var headYOffset = 1 + 0.7 * 0.7 / 2; // Body height plus half of head height (since scale is uniform for sphere)
+            CreateObjectStack("sphere", [0, headYOffset + 0.2, 0], 0, [1, 0, 0], [0.5, 0.5, 0.5], colorWhite);
+        gPop(); // End head
+        
+        gPush(); // Hat
+            // Adjust hat position based on body and head height and hat's own height
+            var hatYOffset = headYOffset + 0.4 * 0.4 + 0.2 + 0.1; // Top of head plus hat height
+            CreateObjectStack("cone", [0, hatYOffset + 0.3, 0], -90, [1, 0, 0], [0.5, 0.5, 0.5], colorRed);
+        gPop(); // End hat
+
+        gPush(); // Left Eyes
+            // Adjust head position based on body height and head's own offset
+            var headYOffset = 1 + 0.7 * 0.7 / 2; // Body height plus half of head height (since scale is uniform for sphere)
+            CreateObjectStack("sphere", [0+0.4, headYOffset + 0.3, 0], 0, [1, 0, 0], [0.2, 0.2, 0.2], colorWhite);
+        gPop(); // End Eyes
+
+        gPush(); // Right Eyes
+            // Adjust head position based on body height and head's own offset
+            var headYOffset = 1 + 0.7 * 0.7 / 2; // Body height plus half of head height (since scale is uniform for sphere)
+            CreateObjectStack("sphere", [0.3, headYOffset + 0.3, 0.3], 0, [1, 0, 0], [0.2, 0.2, 0.2], colorWhite);
+        gPop(); // End Eyes
+        
+        gPush(); // Left Eyes
+            // Adjust head position based on body height and head's own offset
+            var headYOffset = 1 + 0.7 * 0.7 / 2; // Body height plus half of head height (since scale is uniform for sphere)
+            CreateObjectStack("sphere", [0+0.4, headYOffset + 0.3, 0+0.5], 0, [1, 0, 0], [0.1, 0.1, 0.1], colorBlack);
+        gPop(); // End Eyes
+
+        gPush(); // Right Eyes
+            // Adjust head position based on body height and head's own offset
+            var headYOffset = 1 + 0.7 * 0.7 / 2; // Body height plus half of head height (since scale is uniform for sphere)
+            CreateObjectStack("sphere", [0.3+0.3, headYOffset + 0.3, 0.3 - 0.2], 0, [1, 0, 0], [0.1, 0.1, 0.1], colorBlack);
+        gPop(); // End Eyes
+        
+        // Repeat similar structure for arms and legs with correct positioning
+        
+        gPush(); // Left leg
+            // Left arm X position is body width plus half arm width to the left
+            var leftArmXOffset = -(0.7 / 2 + 0.15 / 2);
+            CreateObjectStack("cube", [leftArmXOffset, 0.5, 0], 0, [0, 0, 1], [0.15, 0.29, 0.15], colorWhite);
+        gPop(); // End left arm
+        
+        gPush(); // Right leg
+            // Right arm X position is body width plus half arm width to the right
+            var rightArmXOffset = (0.7 / 2 + 0.15 / 2);
+            CreateObjectStack("cube", [rightArmXOffset, 0.5, 0], 0, [0, 0, 1], [0.15, 0.29, 0.15], colorWhite);
+        gPop(); // End right arm
+        
+        // Legs would be similar, adjusted for the body's bottom position, not added as code repetition, adjust if you have different sizes or positions for legs.
+
+    gPop(); // End gnome frame
+
+    // end gnome
 
     console.log(timeSeconds);
 	
