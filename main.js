@@ -743,13 +743,8 @@ function render(timestamp) {
 
     // use textures
     SetTextureUse(1);
-
     MakeTextureActive(1, "texture1", gl.TEXTURE1);
-
-    
-    // create ground
     CreateObjectStack("cube", groundPos, 0, xAxis, [groundScale[0], groundScale[1], groundScale[2]], colorGrassGreen);
-
     MakeTextureActive(0, "texture0", gl.TEXTURE0);
 
     gPush();
