@@ -681,12 +681,10 @@ function render(timestamp) {
     ];
 
     // butterfly
-    bfPos = [0, 0, 0];
+    bfPos = [-5, 0, 0];
     bfAngle = -20;
     bfScaleConst = 1;
-    bfBodyScale = [0.3 * bfScaleConst, 1 * bfScaleConst, 0.3 * bfScaleConst]; 
-    bfLeftWingPos = [0.7, 0, 0];
-    bfRightWingPos = [0, 0, 0];
+    bfBodyScale = [0.3 * bfScaleConst, 1 * bfScaleConst, 0.3 * bfScaleConst];
     bfWingScale = [0.5, 0.1, 1];
     bfLeftWingAngle = [0, 0, 0];
     bfRightWingAngle = [0, 0, 0];
@@ -698,6 +696,7 @@ function render(timestamp) {
     bfLeftEyePos = [0, 0, 0];
     bfRightEyePos = [0, 0, 0];
     bfEyeScale = [1, 0.2, 0.2];
+    bfTranslateConst = 1.5;
 
     SetTextureUse(0);
 
@@ -708,7 +707,7 @@ function render(timestamp) {
         bfPos[1] = bfHeightFactor * Math.cos( radians(timestamp) / bfHeightDivisor);
 
         // move across screen
-        bfPos[0] += timestamp/1000.0;
+        bfPos[0] += timestamp/(bfTranslateConst * 1000.0);
 
         CreateObjectStack("sphere", bfPos, bfAngle, zAxis, bfBodyScale, colorBlue);
 
@@ -745,8 +744,6 @@ function render(timestamp) {
             }
             gPop();
         gPop();
-
-    //CreateObjectStack("cube", bfLeftWingPos, bfLeftWingAngle[0], xAxis, bfWingScale, colorWhite);
     gPop();
 
 
