@@ -78,6 +78,7 @@ var colorGrassGreen = vec4(0.24,0.57,0.25, 1.0);
 var colorMidnightBlue = vec4(0.0,0.20,0.40, 1.0);
 var colorAlmond = vec4(0.94, 0.87, 0.8);
 var colorDarkBrown = vec4(0.4, 0.26, 0.13);
+var colorGold = vec4(0.93, 0.91, 0.67);
 
 //making a texture image procedurally
 //Let's start with a 1-D array
@@ -676,8 +677,7 @@ function render(timestamp) {
     // butterfly
     var bfPos = [-5, 7, 0];
     var bfAngle = -20;
-    var bfScaleConst = 1;
-    var bfBodyScale = [0.3 * bfScaleConst, 1 * bfScaleConst, 0.3 * bfScaleConst];
+    var bfBodyScale = [0.3, 0.8, 0.3];
     var bfWingScale = [0.5, 0.1, 1];
     var bfLeftWingAngle = [0, 0, 0];
     var bfRightWingAngle = [0, 0, 0];
@@ -708,7 +708,7 @@ function render(timestamp) {
         // move across screen
         bfPos[0] += timestamp / (bfTranslateConst * 1000.0);
 
-        CreateObjectStack("sphere", bfPos, bfAngle, zAxis, bfBodyScale, colorBlue);
+        CreateObjectStack("sphere", bfPos, bfAngle, zAxis, bfBodyScale, colorBlack);
 
         
         // wings
@@ -721,7 +721,7 @@ function render(timestamp) {
             gTranslate(bfWingOffset, 0, 0);
             gPush();
             {
-                setColor(colorWhite);
+                setColor(colorGold);
                 gScale(bfWingScale[0], bfWingScale[1], bfWingScale[2]);
                 drawCube();
             }
@@ -737,7 +737,7 @@ function render(timestamp) {
             gTranslate(-bfWingOffset, 0, 0);
             gPush();
             {
-                setColor(colorWhite);
+                setColor(colorGold);
                 gScale(bfWingScale[0], bfWingScale[1], bfWingScale[2]);
                 drawCube();
             }
