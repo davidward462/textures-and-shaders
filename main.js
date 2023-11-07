@@ -625,15 +625,22 @@ function render(timestamp) {
     // set the camera matrix
     viewMatrix = lookAt(eye, at, up);
    
-    // set the projection matrix
-    projectionMatrix = ortho(left, right, bottom, ytop, near, far);
-
     // perspective projection
-    fovy = 70;
+    fovy = 65;
     aspect = 1;
-    //projectionMatrix = perspective(fovy, aspect, near, far)
 
-    
+    var usePerspective = false;
+
+    if (usePerspective)
+    {
+        // set the projection matrix
+        projectionMatrix = perspective(fovy, aspect, near, far)
+    }
+    else
+    {
+        projectionMatrix = ortho(left, right, bottom, ytop, near, far);
+    }
+
     // set all the matrices
     setAllMatrices();
     
@@ -671,7 +678,8 @@ function render(timestamp) {
         [-3, mushroomWorldHeight, 4],
         [3, mushroomWorldHeight, -4],
         [3, mushroomWorldHeight, -3],
-        [3, mushroomWorldHeight, 3]
+        [3, mushroomWorldHeight, 3],
+        [-3, mushroomWorldHeight, 3]
     ];
 
     // butterfly
@@ -756,6 +764,10 @@ function render(timestamp) {
 
     gPush();
         CreateSmallMushroom(mushroomPosList[9], colorWhite);
+    gPop();
+
+    gPush();
+        CreateSmallMushroom(mushroomPosList[10], colorWhite);
     gPop();
 
     // do not use textures
