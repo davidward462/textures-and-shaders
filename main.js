@@ -43,7 +43,7 @@ var TIME = 0.0; // Realtime
 var dt = 0.0
 var prevTime = 0.0;
 var resetTimerFlag = true;
-var animFlag = false;
+var animFlag = true;
 var controller;
 
 // toggle view angle with button
