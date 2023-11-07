@@ -672,24 +672,22 @@ function render(timestamp) {
     ];
 
     // butterfly
-    bfPos = [-5, 7, 0];
-    bfAngle = -20;
-    bfScaleConst = 1;
-    bfBodyScale = [0.3 * bfScaleConst, 1 * bfScaleConst, 0.3 * bfScaleConst];
-    bfWingScale = [0.5, 0.1, 1];
-    bfLeftWingAngle = [0, 0, 0];
-    bfRightWingAngle = [0, 0, 0];
-    bfWingDistance = 50;
-    bfWingSpeed = 3;
-    bfWingOffset = 0.8;
-    bfHeightFactor = 0.5;
-    bfHeightDivisor = 6;
-    bfLeftEyePos = [0, 0, 0];
-    bfRightEyePos = [0, 0, 0];
-    bfEyeScale = [1, 0.2, 0.2];
-    bfTranslateConst = 1.5;
-
-    
+    var bfPos = [-5, 7, 0];
+    var bfAngle = -20;
+    var bfScaleConst = 1;
+    var bfBodyScale = [0.3 * bfScaleConst, 1 * bfScaleConst, 0.3 * bfScaleConst];
+    var bfWingScale = [0.5, 0.1, 1];
+    var bfLeftWingAngle = [0, 0, 0];
+    var bfRightWingAngle = [0, 0, 0];
+    var bfWingDistance = 50;
+    var bfWingSpeed = 3;
+    var bfWingOffset = 0.8;
+    var bfHeightFactor = 0.5;
+    var bfHeightDivisor = 6;
+    var bfLeftEyePos = [0, 0, 0];
+    var bfRightEyePos = [0, 0, 0];
+    var bfEyeScale = [1, 0.2, 0.2];
+    var bfTranslateConst = 1.5;
 
     // use textures
     SetTextureUse(1);
@@ -763,68 +761,70 @@ function render(timestamp) {
 
 
     // begin gnome
-    gnomePos = [0.5, 0.7, 0.5];
+    var gnomePos = [0.5, 1, 0.5];
+    var gnomeHeadPos = [0, 0, 0];
+
+    var headYOffset = 1 + 0.7 * 0.7 / 2; // Body height plus half of head height (since scale is uniform for sphere)
+    var hatYOffset = headYOffset + 0.4 * 0.4 + 0.2 + 0.1; // Top of head plus hat height
+    var headYOffset = 1 + 0.7 * 0.7 / 2; // Body height plus half of head height (since scale is uniform for sphere)
+    var leftArmXOffset = -(0.7 / 2 + 0.15 / 2);
+    var rightArmXOffset = (0.7 / 2 + 0.15 / 2);
 
     gPush(); // Gnome frame
-        // Translate the entire gnome frame to the position
-        gTranslate(gnomePos[0], gnomePos[1], gnomePos[2]);
+
+        //gTranslate(gnomePos[0], gnomePos[1], gnomePos[2]);
         
         gPush(); // Gnome body
             // Cone as the body needs no initial rotation if it's meant to stand upright.
-            CreateObjectStack("cone", [0, 1, 0], -90, [1, 0, 0], [0.9, 0.9, 0.9], colorBlue);
+            CreateObjectStack("cone", gnomePos, 0, xAxis, [0.9, 0.9, 0.9], colorBlue);
+
+
+            gPush(); // Head
+                // Adjust head position based on body height and head's own offset
+                CreateObjectStack("sphere", gnomeHeadPos, 0, [1, 0, 0], [0.5, 0.5, 0.5], colorWhite);
+
+
+                gPush(); // Hat
+                    // Adjust hat position based on body and head height and hat's own height
+                    CreateObjectStack("cone", [0, hatYOffset + 0.3, 0], -90, [1, 0, 0], [0.5, 0.5, 0.5], colorRed);
+                gPop(); // End hat
+
+                gPush(); // Left Eyes
+                    // Adjust head position based on body height and head's own offset
+                    CreateObjectStack("sphere", [0+0.4, headYOffset + 0.3, 0], 0, [1, 0, 0], [0.2, 0.2, 0.2], colorWhite);
+                gPop(); // End Eyes
+
+                gPush(); // Right Eyes
+                    // Adjust head position based on body height and head's own offset
+                    CreateObjectStack("sphere", [0.3, headYOffset + 0.3, 0.3], 0, [1, 0, 0], [0.2, 0.2, 0.2], colorWhite);
+                gPop(); // End Eyes
+                
+                gPush(); // Left Eyes
+                    // Adjust head position based on body height and head's own offset
+                    CreateObjectStack("sphere", [0+0.4, headYOffset + 0.3, 0+0.5], 0, [1, 0, 0], [0.1, 0.1, 0.1], colorBlack);
+                gPop(); // End Eyes
+
+                gPush(); // Right Eyes
+                    // Adjust head position based on body height and head's own offset
+                    CreateObjectStack("sphere", [0.3+0.3, headYOffset + 0.3, 0.3 - 0.2], 0, [1, 0, 0], [0.1, 0.1, 0.1], colorBlack);
+                gPop(); // End Eyes
+
+            gPop(); // End head
+
         gPop(); // End body
-        
-        gPush(); // Head
-            // Adjust head position based on body height and head's own offset
-            var headYOffset = 1 + 0.7 * 0.7 / 2; // Body height plus half of head height (since scale is uniform for sphere)
-            CreateObjectStack("sphere", [0, headYOffset + 0.2, 0], 0, [1, 0, 0], [0.5, 0.5, 0.5], colorWhite);
-        gPop(); // End head
-        
-        gPush(); // Hat
-            // Adjust hat position based on body and head height and hat's own height
-            var hatYOffset = headYOffset + 0.4 * 0.4 + 0.2 + 0.1; // Top of head plus hat height
-            CreateObjectStack("cone", [0, hatYOffset + 0.3, 0], -90, [1, 0, 0], [0.5, 0.5, 0.5], colorRed);
-        gPop(); // End hat
-
-        gPush(); // Left Eyes
-            // Adjust head position based on body height and head's own offset
-            var headYOffset = 1 + 0.7 * 0.7 / 2; // Body height plus half of head height (since scale is uniform for sphere)
-            CreateObjectStack("sphere", [0+0.4, headYOffset + 0.3, 0], 0, [1, 0, 0], [0.2, 0.2, 0.2], colorWhite);
-        gPop(); // End Eyes
-
-        gPush(); // Right Eyes
-            // Adjust head position based on body height and head's own offset
-            var headYOffset = 1 + 0.7 * 0.7 / 2; // Body height plus half of head height (since scale is uniform for sphere)
-            CreateObjectStack("sphere", [0.3, headYOffset + 0.3, 0.3], 0, [1, 0, 0], [0.2, 0.2, 0.2], colorWhite);
-        gPop(); // End Eyes
-        
-        gPush(); // Left Eyes
-            // Adjust head position based on body height and head's own offset
-            var headYOffset = 1 + 0.7 * 0.7 / 2; // Body height plus half of head height (since scale is uniform for sphere)
-            CreateObjectStack("sphere", [0+0.4, headYOffset + 0.3, 0+0.5], 0, [1, 0, 0], [0.1, 0.1, 0.1], colorBlack);
-        gPop(); // End Eyes
-
-        gPush(); // Right Eyes
-            // Adjust head position based on body height and head's own offset
-            var headYOffset = 1 + 0.7 * 0.7 / 2; // Body height plus half of head height (since scale is uniform for sphere)
-            CreateObjectStack("sphere", [0.3+0.3, headYOffset + 0.3, 0.3 - 0.2], 0, [1, 0, 0], [0.1, 0.1, 0.1], colorBlack);
-        gPop(); // End Eyes
         
         // Repeat similar structure for arms and legs with correct positioning
         
         gPush(); // Left leg
             // Left arm X position is body width plus half arm width to the left
-            var leftArmXOffset = -(0.7 / 2 + 0.15 / 2);
             CreateObjectStack("cube", [leftArmXOffset, 0.5, 0], 0, [0, 0, 1], [0.15, 0.29, 0.15], colorWhite);
         gPop(); // End left arm
         
         gPush(); // Right leg
             // Right arm X position is body width plus half arm width to the right
-            var rightArmXOffset = (0.7 / 2 + 0.15 / 2);
             CreateObjectStack("cube", [rightArmXOffset, 0.5, 0], 0, [0, 0, 1], [0.15, 0.29, 0.15], colorWhite);
         gPop(); // End right arm
         
-        // Legs would be similar, adjusted for the body's bottom position, not added as code repetition, adjust if you have different sizes or positions for legs.
 
     gPop(); // End gnome frame
 
