@@ -762,9 +762,9 @@ function render(timestamp) {
 
     // begin gnome
     var gnomePos = [0.5, 3, 0.5];
-    var gnomeBodyScale = [0.9, 0.9, -0.9];
+    var gnomeBodyScale = [0.7, 0.7, -0.9];
 
-    var gnomeHeadPos = [0, 2, 0];
+    var gnomeHeadPos = [0, 0.5, 0];
     var gnomeHeadScale = [0.5, 0.5, 0.5];
     
     var gnomeHatScale = [0.5, 0.5, 1];
@@ -778,6 +778,9 @@ function render(timestamp) {
     var gnomePupilPos = [1, 0, 0];
     
     var gnomeLegScale = [0.15, 0.3, 0.15];
+    var gnomeLegHeight = -0.7;
+    var gnomeLeftLegPos = [-0.3, gnomeLegHeight, 0];
+    var gnomeRightLegPos = [0.3, gnomeLegHeight, 0];
 
     var headYOffset = 1 + 0.7 * 0.7 / 2; // Body height plus half of head height (since scale is uniform for sphere)
     var hatYOffset = headYOffset + 0.4 * 0.4 + 0.2 + 0.1; // Top of head plus hat height
@@ -814,12 +817,12 @@ function render(timestamp) {
 
             gPush(); // Left leg
                 // Left arm X position is body width plus half arm width to the left
-                CreateObjectStack("cube", [leftArmXOffset, 0.5, 0], 0, xAxis, gnomeLegScale, colorWhite);
+                CreateObjectStack("cube", gnomeLeftLegPos, 0, xAxis, gnomeLegScale, colorWhite);
             gPop(); // End left arm
             
             gPush(); // Right leg
                 // Right arm X position is body width plus half arm width to the right
-                CreateObjectStack("cube", [rightArmXOffset, 0.5, 0], 0, xAxis, gnomeLegScale, colorWhite);
+                CreateObjectStack("cube", gnomeRightLegPos, 0, xAxis, gnomeLegScale, colorWhite);
             gPop(); // End right arm
 
         gPop(); // End body
